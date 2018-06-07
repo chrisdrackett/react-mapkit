@@ -24,11 +24,11 @@ const typography = new Typography({
 typography.injectStyles()
 
 const content = `
-# React Mapkit 🗺️
+# React MapKit 🗺️
 
 ## Intro
 
-This is a demo page for [React Mapkit](https://github.com/chrisdrackett/react-mapkit), a react wrapper for Apple Maps (mapkit.js)
+This is a demo page for [React MapKit](https://github.com/chrisdrackett/react-mapkit), a react wrapper for Apple Maps (MapKit.js)
 
 ## Uses
 
