@@ -1,0 +1,49 @@
+{
+  "name": "react-mapkit",
+  "version": "0.1.0",
+  "description": "React wrapper for Apple's mapkit.js.",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "files": ["css", "es", "lib", "umd"],
+  "scripts": {
+    "build": "nwb build-react-component",
+    "clean": "nwb clean-module && nwb clean-demo",
+    "flow": "flow",
+    "precommit": "lint-staged",
+    "start": "nwb serve-react-demo",
+    "test:coverage": "nwb test-react --coverage",
+    "test:watch": "nwb test-react --server",
+    "test": "nwb test-react"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
+  },
+  "peerDependencies": {
+    "react": "16.x",
+    "react-dom": "16.x"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.69.0",
+    "glamor": "^2.20.40",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.2",
+    "nwb": "0.21.x",
+    "prettier": "^1.11.1",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "react-markdown": "^3.3.0",
+    "typography": "^0.16.6",
+    "typography-theme-us-web-design-standards": "^0.16.9"
+  },
+  "author": "Chris Drackett <chris@drackett.com>",
+  "homepage": "https://github.com/chrisdrackett/react-mapkit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrisdrackett/react-mapkit"
+  },
+  "bugs": {
+    "url": "https://github.com/chrisdrackett/react-mapkit/issues"
+  },
+  "keywords": ["react-component", "textfit", "fittext", "resize", "text"]
+}
