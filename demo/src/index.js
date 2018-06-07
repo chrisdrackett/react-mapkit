@@ -39,7 +39,7 @@ class Demo extends React.Component {
       mapkit.init({
         authorizationCallback: function(done) {
           done(
-            'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFLNTY2RFk1ODIifQ.eyJpYXQiOjE1MjgzNTM1NTkuODAxLCJpc3MiOiJHOERBODY0VVlLIiwib3JpZ2luIjoiaHR0cHM6Ly9jaHJpc2RyYWNrZXR0LmdpdGh1Yi5pbyJ9.iQACl4A3JH-y_1YWiHQHSPZoZbT2_so1kdnSBBqEO-IjfPz9X8J6Isr5mISpjY3QOf8fgbnpN1Wl0Ny3Nlbo4A',
+            'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkY2N0c4OTM3RjUifQ.eyJpYXQiOjE1MjgzNTQwOTYuNzI2LCJpc3MiOiJHOERBODY0VVlLIiwib3JpZ2luIjoiaHR0cHM6Ly9jaHJpc2RyYWNrZXR0LmdpdGh1Yi5pbyJ9.Z9FW9wYDO0AfOyWnf0d3vLGbu62GTu7WKtxPXAuVFiimr1DR4JN_s6YB8wG9kvZl4ACp4j857U4bOV5NIi55HA',
           )
         },
         language: 'en',
