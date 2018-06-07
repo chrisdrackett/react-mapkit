@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import load from 'little-loader'
+import invariant from 'invariant'
 
 type Props = {
   /**
@@ -16,7 +17,7 @@ type State = {
   makKitIsStarted: boolean,
 }
 
-export default class ComponentTemplate extends React.Component<Props, State> {
+export default class MapKit extends React.Component<Props, State> {
   map = null
 
   state = {
@@ -33,6 +34,13 @@ export default class ComponentTemplate extends React.Component<Props, State> {
         this.setState({ mapKitIsReady: true })
       },
       this,
+    )
+  }
+
+  static getDerivedStateFromProps(props: Props, state: State) {
+    invariant(
+      props.callbackUrl || props.token,
+      'Either a `callbackUrl` or `token` is required for the `MapKit` component.',
     )
   }
 

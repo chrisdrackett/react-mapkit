@@ -1,6 +1,6 @@
 {
   "name": "react-mapkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React wrapper for Apple's mapkit.js.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -33,6 +33,10 @@
     "react": "16.x",
     "react-dom": "16.x"
   },
+  "dependencies": {
+    "invariant": "^2.2.4",
+    "little-loader": "^0.2.0"
+  },
   "devDependencies": {
     "colors": "^1.3.0",
     "flow-bin": "0.73.x",
@@ -64,8 +68,5 @@
     "maps",
     "mapkit",
     "apple"
-  ],
-  "dependencies": {
-    "little-loader": "^0.2.0"
-  }
+  ]
 }
