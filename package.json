@@ -24,17 +24,13 @@
     "react-dom": "16.x"
   },
   "devDependencies": {
-    "flow-bin": "^0.69.0",
-    "glamor": "^2.20.40",
-    "husky": "^0.14.3",
-    "lint-staged": "^7.0.2",
-    "nwb": "0.21.x",
-    "prettier": "^1.11.1",
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0",
-    "react-markdown": "^3.3.0",
-    "typography": "^0.16.6",
-    "typography-theme-us-web-design-standards": "^0.16.9"
+    "flow-bin": "0.73.x",
+    "husky": "0.14.x",
+    "lint-staged": "7.1.x",
+    "nwb": "0.22.x",
+    "prettier": "1.13.x",
+    "react": "16.4.x",
+    "react-dom": "16.4.x"
   },
   "author": "Chris Drackett <chris@drackett.com>",
   "homepage": "https://github.com/chrisdrackett/react-mapkit",
@@ -45,5 +41,5 @@
   "bugs": {
     "url": "https://github.com/chrisdrackett/react-mapkit/issues"
   },
-  "keywords": ["react-component", "textfit", "fittext", "resize", "text"]
+  "keywords": ["react-component", "maps", "mapkit", "apple"]
 }
