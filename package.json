@@ -22,7 +22,7 @@
     "test": "nwb test-react",
     "keygen": "node keygen",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "deploy": "./scripts/deploy.js"
   },
   "lint-staged": {
     "*.{js,json,css,md}": [
@@ -48,8 +48,8 @@
     "babel-core": "^6.26.3",
     "babel-runtime": "^6.26.0",
     "colors": "^1.3.0",
+    "cross-spawn": "^6.0.5",
     "flow-bin": "0.73.x",
-    "glamor": "2.20.x",
     "husky": "0.14.x",
     "jsonwebtoken": "8.2.x",
     "lint-staged": "7.1.x",
@@ -57,10 +57,7 @@
     "prettier": "1.13.x",
     "prompt": "^1.0.0",
     "react": "16.4.x",
-    "react-dom": "16.4.x",
-    "react-markdown": "3.3.x",
-    "typography": "0.16.x",
-    "typography-theme-us-web-design-standards": "0.16.x"
+    "react-dom": "16.4.x"
   },
   "author": "Chris Drackett <chris@drackett.com>",
   "homepage": "https://github.com/chrisdrackett/react-mapkit",
