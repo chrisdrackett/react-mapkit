@@ -1,5 +1,4 @@
 /coverage
-/demo/dist
 /es
 /lib
 /node_modules
@@ -7,5 +6,3 @@
 npm-debug.log*
 .DS_Store
 /keygen/key.p8
-/src/dist
-/devToken.js
