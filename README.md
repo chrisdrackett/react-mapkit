@@ -15,6 +15,16 @@ This package includes a script you can use to generate a JWT key. To use add you
 
 follow the prompts. The generated key can then be used for your app. If you want to generate short keys you can refer to the script in keygen to get an idea of how to do this in node.
 
+## Storybook
+
+This project contains a [storybook](https://storybook.js.org) that shows examples of how the component can be used. To use this storybook follow these steps:
+
+1.  copy `devToken.js.rename` to `devToken.js`
+2.  add a valid token from apple to `devToken.js`
+3.  run `yarn` then `yarn storybook`
+4.  visit the URL storybook gives you
+5.  play with maps!
+
 ## MapKit Component
 
 This is the component that will render a map. You'll need to provide either a `callbackUrl` or a `token` for this component to work.
