@@ -6,3 +6,4 @@
 npm-debug.log*
 .DS_Store
 /keygen/key.p8
+/devToken.js
