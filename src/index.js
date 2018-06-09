@@ -1,7 +1,11 @@
 // @flow
-/* global mapkit */
 
-import type MapKitType, { FeatureVisibility, MapType, Map } from 'mapkit'
+import type MapKitType, {
+  FeatureVisibility,
+  MapType,
+  Map,
+  PaddingOptions,
+} from 'mapkit'
 declare var mapkit: MapKitType
 
 import * as React from 'react'
@@ -14,9 +18,7 @@ type MapKitCoordinate = [number, number]
 
 type Location = MapKitCoordinate
 
-type PaddingType =
-  | number
-  | { top?: number, bottom?: number, left?: number, right?: number }
+type PaddingType = number | PaddingOptions
 
 type Props = {
   callbackUrl?: string,
@@ -117,10 +119,8 @@ class MapKit extends React.Component<Props, State> {
   }
 
   updateMapProps = (props: Props) => {
-    // Update map based on props
     this.map.showsMapTypeControl = props.showsMapTypeControl
     this.map.mapType = props.mapType
-
     this.map.padding = this.createPadding(props.padding)
     this.map.showsCompass = props.showsCompass
     this.map.showsMapTypeControl = props.showsMapTypeControl
