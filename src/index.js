@@ -1,7 +1,7 @@
 // @flow
 /* global mapkit */
 
-import type MapKitType from 'mapkit'
+import type MapKitType, { MapKitFeatureVisibility, MapKitMapType } from 'mapkit'
 declare var mapkit: MapKitType
 
 import * as React from 'react'
@@ -10,21 +10,20 @@ import invariant from 'invariant'
 
 import ErrorBoundry from './ErrorBoundry'
 
-type MapKitFeatureVisibility = 'adaptive' | 'hidden' | 'visible'
-type MapKitMapType = 'hybrid' | 'satellite' | 'standard'
-
 type MapKitCoordinate = [number, number]
 
 type Location = MapKitCoordinate
+
+type PaddingType =
+  | number
+  | { top?: number, bottom?: number, left?: number, right?: number }
 
 type Props = {
   callbackUrl?: string,
   token?: string,
 
   mapType: MapKitMapType,
-  padding:
-    | number
-    | { top?: number, bottom?: number, left?: number, right?: number },
+  padding: PaddingType,
   showsCompass: MapKitFeatureVisibility,
   showsMapTypeControl: boolean,
   showsZoomControl: boolean,
@@ -35,6 +34,10 @@ type Props = {
 
   center?: MapKitCoordinate,
   animateCenterChange: boolean,
+
+  isRotationEnabled: boolean,
+  isScrollEnabled: boolean,
+  isZoomEnabled: boolean,
 
   showsUserLocationControl: boolean,
 }
@@ -59,6 +62,9 @@ class MapKit extends React.Component<Props, State> {
     showsPointsOfInterest: true,
     showsScale: 'hidden',
     animateCenterChange: true,
+    isRotationEnabled: true,
+    isScrollEnabled: true,
+    isZoomEnabled: true,
   }
 
   state = {
@@ -104,18 +110,7 @@ class MapKit extends React.Component<Props, State> {
     this.map.showsMapTypeControl = props.showsMapTypeControl
     this.map.mapType = props.mapType
 
-    const padding = new mapkit.Padding(
-      typeof props.padding === 'number'
-        ? {
-            top: props.padding,
-            right: props.padding,
-            bottom: props.padding,
-            left: props.padding,
-          }
-        : { top: 0, right: 0, bottom: 0, left: 0, ...props.padding },
-    )
-
-    this.map.padding = padding
+    this.map.padding = this.createPadding(props.padding)
     this.map.showsCompass = props.showsCompass
     this.map.showsMapTypeControl = props.showsMapTypeControl
     this.map.showsZoomControl = props.showsZoomControl
@@ -123,16 +118,32 @@ class MapKit extends React.Component<Props, State> {
     this.map.showsPointsOfInterest = props.showsPointsOfInterest
     this.map.showsScale = props.showsScale
     this.map.tintColor = props.tintColor
+    this.map.isRotationEnabled = props.isRotationEnabled
+    this.map.isScrollEnabled = props.isScrollEnabled
+    this.map.isZoomEnabled = props.isZoomEnabled
 
     if (props.center) {
       this.map.setCenterAnimated(
-        this.getCoordinate(props.center),
+        this.createCoordinate(props.center),
         props.animateCenterChange,
       )
     }
   }
 
-  getCoordinate = (location: Location) => {
+  createPadding = (padding: PaddingType) => {
+    return new mapkit.Padding(
+      typeof padding === 'number'
+        ? {
+            top: padding,
+            right: padding,
+            bottom: padding,
+            left: padding,
+          }
+        : { top: 0, right: 0, bottom: 0, left: 0, ...padding },
+    )
+  }
+
+  createCoordinate = (location: Location) => {
     return new mapkit.Coordinate(location[0], location[1])
   }
 
@@ -180,6 +191,10 @@ class MapKit extends React.Component<Props, State> {
 
       animateCenterChange,
       center,
+
+      isRotationEnabled,
+      isScrollEnabled,
+      isZoomEnabled,
 
       ...otherProps
     } = this.props

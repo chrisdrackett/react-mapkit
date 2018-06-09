@@ -37,6 +37,9 @@ storiesOf('MapKit', module)
         number('longitude', -122.3308333),
       ]}
       animateCenterChange={boolean('animateCenterChange', true)}
+      isRotationEnabled={boolean('isRotationEnabled', true)}
+      isScrollEnabled={boolean('isScrollEnabled', true)}
+      isZoomEnabled={boolean('isZoomEnabled', true)}
     />
   ))
   .add('individual padding values', () => (
