@@ -1,4 +1,5 @@
 // @flow
+/* global mapkit */
 
 import * as React from 'react'
 import load from 'little-loader'
