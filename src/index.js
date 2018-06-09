@@ -121,9 +121,7 @@ class MapKit extends React.Component<Props, State> {
     // make sure we have at least one init prop
     this.checkProps(nextProps)
 
-    let ComponentShouldUpdate = false
-
-    // if our init props have changed, re-init the map
+    // if our init props have changed, throw an error, we currently don't re-init the map
     if (
       this.props.token !== nextProps.token ||
       this.props.callbackUrl !== nextProps.callbackUrl
@@ -131,9 +129,13 @@ class MapKit extends React.Component<Props, State> {
       invariant(false, defaultPropsErrorText)
     }
 
-    if (this.props.children !== nextProps.children) {
-      ComponentShouldUpdate = true
-    }
+    // for a lot of prop changes we're just making calls to mapKit so we have no need to re-render
+    let ComponentShouldUpdate = false
+
+    // might be needed when we start adding markers, but for now not a thing we do
+    // if (this.props.children !== nextProps.children) {
+    //   ComponentShouldUpdate = true
+    // }
 
     if (this.state.mapKitIsReady) {
       this.updateMapProps(nextProps)
