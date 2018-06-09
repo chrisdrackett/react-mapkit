@@ -1,6 +1,9 @@
 // @flow
 /* global mapkit */
 
+import type MapKitType from 'mapkit'
+declare var mapkit: MapKitType
+
 import * as React from 'react'
 import load from 'little-loader'
 import invariant from 'invariant'
@@ -126,8 +129,6 @@ class MapKit extends React.Component<Props, State> {
         this.getCoordinate(props.center),
         props.animateCenterChange,
       )
-    } else {
-      this.map.center = undefined
     }
   }
 
