@@ -32,6 +32,11 @@ storiesOf('MapKit', module)
         'hidden',
       )}
       tintColor={text('tintColor', '')}
+      center={[
+        number('latitude', 47.6063889),
+        number('longitude', -122.3308333),
+      ]}
+      animateCenterChange={boolean('animateCenterChange', true)}
     />
   ))
   .add('individual padding values', () => (

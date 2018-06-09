@@ -9,6 +9,10 @@ import ErrorBoundry from './ErrorBoundry'
 type MapKitFeatureVisibility = 'adaptive' | 'hidden' | 'visible'
 type MapKitMapType = 'hybrid' | 'satellite' | 'standard'
 
+type MapKitCoordinate = [number, number]
+
+type Location = MapKitCoordinate
+
 type Props = {
   callbackUrl?: string,
   token?: string,
@@ -25,12 +29,14 @@ type Props = {
   showsScale: MapKitFeatureVisibility,
   tintColor?: string,
 
+  center?: MapKitCoordinate,
+  animateCenterChange: boolean,
+
   showsUserLocationControl: boolean,
 }
 
 type State = {
   mapKitIsReady: boolean,
-  makKitIsStarted: boolean,
 }
 
 const defaultPropsErrorText =
@@ -48,15 +54,23 @@ class MapKit extends React.Component<Props, State> {
     showsUserLocationControl: false,
     showsPointsOfInterest: true,
     showsScale: 'hidden',
+    animateCenterChange: true,
   }
 
   state = {
     mapKitIsReady: false,
-    makKitIsStarted: false,
   }
 
-  checkProps = (props: Props) => {
-    invariant(props.callbackUrl || props.token, defaultPropsErrorText)
+  constructor(props: Props) {
+    super(props)
+
+    this.checkProps(props)
+
+    load(
+      'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js',
+      () => this.initMap(props),
+      this,
+    )
   }
 
   initMap = (props: Props) => {
@@ -72,11 +86,13 @@ class MapKit extends React.Component<Props, State> {
 
     this.map = new mapkit.Map('map')
 
-    console.log(mapkit.Map.MapTypes.Standard)
-
     this.updateMapProps(props)
 
     this.setState({ mapKitIsReady: true })
+  }
+
+  checkProps = (props: Props) => {
+    invariant(props.callbackUrl || props.token, defaultPropsErrorText)
   }
 
   updateMapProps = (props: Props) => {
@@ -103,18 +119,19 @@ class MapKit extends React.Component<Props, State> {
     this.map.showsPointsOfInterest = props.showsPointsOfInterest
     this.map.showsScale = props.showsScale
     this.map.tintColor = props.tintColor
+
+    if (props.center) {
+      this.map.setCenterAnimated(
+        this.getCoordinate(props.center),
+        props.animateCenterChange,
+      )
+    } else {
+      this.map.center = undefined
+    }
   }
 
-  constructor(props: Props) {
-    super(props)
-
-    this.checkProps(props)
-
-    load(
-      'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js',
-      () => this.initMap(props),
-      this,
-    )
+  getCoordinate = (location: Location) => {
+    return new mapkit.Coordinate(location[0], location[1])
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
@@ -158,6 +175,9 @@ class MapKit extends React.Component<Props, State> {
       showsPointsOfInterest,
       showsScale,
       tintColor,
+
+      animateCenterChange,
+      center,
 
       ...otherProps
     } = this.props
