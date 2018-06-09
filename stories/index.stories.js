@@ -40,6 +40,8 @@ storiesOf('MapKit', module)
       isRotationEnabled={boolean('isRotationEnabled', true)}
       isScrollEnabled={boolean('isScrollEnabled', true)}
       isZoomEnabled={boolean('isZoomEnabled', true)}
+      showsUserLocation={boolean('showsUserLocation', false)}
+      tracksUserLocation={boolean('tracksUserLocation', false)}
     />
   ))
   .add('individual padding values', () => (

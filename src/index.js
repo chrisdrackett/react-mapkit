@@ -1,7 +1,7 @@
 // @flow
 /* global mapkit */
 
-import type MapKitType, { MapKitFeatureVisibility, MapKitMapType } from 'mapkit'
+import type MapKitType, { FeatureVisibility, MapType, Map } from 'mapkit'
 declare var mapkit: MapKitType
 
 import * as React from 'react'
@@ -22,14 +22,14 @@ type Props = {
   callbackUrl?: string,
   token?: string,
 
-  mapType: MapKitMapType,
+  mapType: MapType,
   padding: PaddingType,
-  showsCompass: MapKitFeatureVisibility,
+  showsCompass: FeatureVisibility,
   showsMapTypeControl: boolean,
   showsZoomControl: boolean,
   showsUserLocationControl: boolean,
   showsPointsOfInterest: boolean,
-  showsScale: MapKitFeatureVisibility,
+  showsScale: FeatureVisibility,
   tintColor?: string,
 
   center?: MapKitCoordinate,
@@ -39,7 +39,8 @@ type Props = {
   isScrollEnabled: boolean,
   isZoomEnabled: boolean,
 
-  showsUserLocationControl: boolean,
+  showsUserLocation: boolean,
+  tracksUserLocation: boolean,
 }
 
 type State = {
@@ -50,7 +51,7 @@ const defaultPropsErrorText =
   "Either a `callbackUrl` or `token` is required for the `MapKit` component. One of these props must be set on init and can't be updated after the component is setup."
 
 class MapKit extends React.Component<Props, State> {
-  map = null
+  map: Map
 
   static defaultProps = {
     mapType: 'standard',
@@ -65,6 +66,9 @@ class MapKit extends React.Component<Props, State> {
     isRotationEnabled: true,
     isScrollEnabled: true,
     isZoomEnabled: true,
+
+    showsUserLocation: false,
+    tracksUserLocation: false,
   }
 
   state = {
@@ -84,15 +88,22 @@ class MapKit extends React.Component<Props, State> {
   }
 
   initMap = (props: Props) => {
-    mapkit.init({
-      authorizationCallback: (done) => {
-        props.callbackUrl
-          ? fetch(props.callbackUrl)
+    if (props.callbackUrl || props.token) {
+      mapkit.init({
+        authorizationCallback: (done) => {
+          if (props.callbackUrl) {
+            fetch(props.callbackUrl)
               .then((res) => res.text())
               .then(done)
-          : done(props.token)
-      },
-    })
+          }
+          if (props.token) {
+            done(props.token)
+          }
+        },
+      })
+    } else {
+      throw defaultPropsErrorText
+    }
 
     this.map = new mapkit.Map('map')
 
@@ -121,6 +132,8 @@ class MapKit extends React.Component<Props, State> {
     this.map.isRotationEnabled = props.isRotationEnabled
     this.map.isScrollEnabled = props.isScrollEnabled
     this.map.isZoomEnabled = props.isZoomEnabled
+    this.map.showsUserLocation = props.showsUserLocation
+    this.map.tracksUserLocation = props.tracksUserLocation
 
     if (props.center) {
       this.map.setCenterAnimated(
@@ -139,7 +152,7 @@ class MapKit extends React.Component<Props, State> {
             bottom: padding,
             left: padding,
           }
-        : { top: 0, right: 0, bottom: 0, left: 0, ...padding },
+        : padding,
     )
   }
 
@@ -174,6 +187,10 @@ class MapKit extends React.Component<Props, State> {
     return ComponentShouldUpdate
   }
 
+  componentWillUnmount() {
+    this.map.destroy()
+  }
+
   render() {
     const {
       callbackUrl,
@@ -195,6 +212,9 @@ class MapKit extends React.Component<Props, State> {
       isRotationEnabled,
       isScrollEnabled,
       isZoomEnabled,
+
+      showsUserLocation,
+      tracksUserLocation,
 
       ...otherProps
     } = this.props
