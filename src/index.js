@@ -5,6 +5,8 @@ import type MapKitType, {
   MapType,
   Map,
   PaddingOptions,
+  Coordinate,
+  CoordinateSpan,
 } from 'mapkit'
 declare var mapkit: MapKitType
 
@@ -14,16 +16,31 @@ import invariant from 'invariant'
 
 import ErrorBoundry from './ErrorBoundry'
 
-type MapKitCoordinate = [number, number]
-
-type Location = MapKitCoordinate
-
+type NumberTuple = [number, number]
 type PaddingType = number | PaddingOptions
 
 type Props = {
+  // Init Props
+  // ⚠️ These props are used for setup and can't be changed once set.
+  // ⚠️ Pick between callbackUrl or token.
   callbackUrl?: string,
   token?: string,
 
+  // Interaction Properties
+  isRotationEnabled: boolean,
+  isScrollEnabled: boolean,
+  isZoomEnabled: boolean,
+
+  // Manipulating the Visible Portion of the Map
+  center?: NumberTuple,
+  span?: NumberTuple,
+  animateViewChange: boolean,
+  rotation?: number,
+  animateRotationChange: boolean,
+  // visibleMapRect
+  // animateMapRectChange
+
+  // Configuring the Map's Appearance
   mapType: MapType,
   padding: PaddingType,
   showsCompass: FeatureVisibility,
@@ -34,18 +51,18 @@ type Props = {
   showsScale: FeatureVisibility,
   tintColor?: string,
 
-  center?: MapKitCoordinate,
-  animateCenterChange: boolean,
+  // Annotations
+  // todo
 
-  isRotationEnabled: boolean,
-  isScrollEnabled: boolean,
-  isZoomEnabled: boolean,
+  // Overlays
+  // todo
 
+  // TileOverlays
+  // todo
+
+  // Displaying the User's Location
   showsUserLocation: boolean,
   tracksUserLocation: boolean,
-
-  rotation?: number,
-  animateRotationChange: boolean,
 }
 
 type State = {
@@ -141,19 +158,48 @@ class MapKit extends React.Component<Props, State> {
     this.map.showsUserLocation = props.showsUserLocation
     this.map.tracksUserLocation = props.tracksUserLocation
 
-    const newCenter = props.center
-      ? this.createCoordinate(props.center)
-      : this.createCoordinate([0, 0])
+    // Map Center
+    let newCenter = this.createCoordinate(0, 0)
+    let newSpan
 
-    if (!newCenter.equals(this.map.center)) {
-      this.map.setCenterAnimated(newCenter, props.animateCenterChange)
+    if (props.center) {
+      try {
+        newCenter = this.createCoordinate(props.center[0], props.center[1])
+      } catch (e) {
+        console.warn(e.message)
+      }
     }
 
+    if (props.span) {
+      try {
+        newSpan = this.createCoordinateSpan(props.span[0], props.span[1])
+      } catch (e) {
+        console.warn(e.message)
+      }
+    }
+
+    if (newSpan) {
+      // if we have a span we'll set a region
+      const newRegion = this.createCoordinateRegion(newCenter, newSpan)
+
+      if (!newRegion.equals(this.map.region)) {
+        this.map.setRegionAnimated(newRegion, props.animateViewChange)
+      }
+    } else {
+      // otherwise we just set the center
+      if (!newCenter.equals(this.map.center)) {
+        this.map.setCenterAnimated(newCenter, props.animateViewChange)
+      }
+    }
+
+    // Map Rotation
     const newRotation = props.rotation ? props.rotation : 0
 
     if (!this.map.rotation !== newRotation) {
       this.map.setRotationAnimated(newRotation, props.animateRotationChange)
     }
+
+    // Map Region
   }
 
   createPadding = (padding: PaddingType) => {
@@ -169,8 +215,16 @@ class MapKit extends React.Component<Props, State> {
     )
   }
 
-  createCoordinate = (location: Location) => {
-    return new mapkit.Coordinate(location[0], location[1])
+  createCoordinate = (latitude: number, longitude: number) => {
+    return new mapkit.Coordinate(latitude, longitude)
+  }
+
+  createCoordinateSpan = (latitudeDelta: number, longitudeDelta: number) => {
+    return new mapkit.CoordinateSpan(latitudeDelta, longitudeDelta)
+  }
+
+  createCoordinateRegion = (center: Coordinate, span: CoordinateSpan) => {
+    return new mapkit.CoordinateRegion(center, span)
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
@@ -219,8 +273,12 @@ class MapKit extends React.Component<Props, State> {
       showsScale,
       tintColor,
 
-      animateCenterChange,
       center,
+      span,
+      animateViewChange,
+
+      rotation,
+      animateRotationChange,
 
       isRotationEnabled,
       isScrollEnabled,
@@ -228,9 +286,6 @@ class MapKit extends React.Component<Props, State> {
 
       showsUserLocation,
       tracksUserLocation,
-
-      rotation,
-      animateRotationChange,
 
       ...otherProps
     } = this.props

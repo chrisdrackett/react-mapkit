@@ -33,10 +33,14 @@ storiesOf('MapKit', module)
       )}
       tintColor={text('tintColor', '')}
       center={[
-        number('latitude', 47.6063889),
-        number('longitude', -122.3308333),
+        number('center latitude', 47.6063889),
+        number('center longitude', -122.3308333),
       ]}
-      animateCenterChange={boolean('animateCenterChange', true)}
+      span={[
+        number('span latitude delta', 0.016),
+        number('span longitude delta', 0.016),
+      ]}
+      animateViewChange={boolean('animateViewChange', true)}
       isRotationEnabled={boolean('isRotationEnabled', true)}
       isScrollEnabled={boolean('isScrollEnabled', true)}
       isZoomEnabled={boolean('isZoomEnabled', true)}

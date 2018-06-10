@@ -13,12 +13,6 @@ declare module 'mapkit' {
     minimumSpan?: CoordinateSpan,
   }
 
-  declare type CoordinateRegion = {
-    //todo
-  }
-  declare type CoordinateSpan = {
-    //todo
-  }
   declare type MapRect = {
     //todo
   }
@@ -32,6 +26,9 @@ declare module 'mapkit' {
     //todo
   }
   declare type TileOverlay = {
+    //todo
+  }
+  declare type BoundingRegion = {
     //todo
   }
 
@@ -89,7 +86,7 @@ declare module 'mapkit' {
     toCoordinate: () => Coordinate,
   }
 
-  declare class Coordinate {
+  declare export class Coordinate {
     latitude: number;
     longitude: number;
 
@@ -97,6 +94,24 @@ declare module 'mapkit' {
     equals: (Coordinate) => boolean;
     toMapPoint: () => MapPoint;
     toUnwrappedMapPoint: () => MapPoint;
+  }
+
+  declare export class CoordinateSpan {
+    latitudeDelta: number;
+    longitudeDelta: number;
+
+    copy: () => CoordinateSpan;
+    equals: (CoordinateSpan) => boolean;
+  }
+
+  declare export class CoordinateRegion {
+    center: Coordinate;
+    span: CoordinateSpan;
+
+    copy: () => CoordinateRegion;
+    equals: (CoordinateRegion) => boolean;
+    toBoundingRegion: () => BoundingRegion;
+    toMapRect: () => MapRect;
   }
 
   declare class Padding {
@@ -196,5 +211,13 @@ declare module 'mapkit' {
     Map(domId?: string, ?MapConstructorOptions): Map;
     Padding(PaddingOptions): Padding;
     Coordinate(latitude: number, longitude: number): Coordinate;
+    CoordinateSpan(
+      latitudeDelta: number,
+      longitudeDelta: number,
+    ): CoordinateSpan;
+    CoordinateRegion(
+      center: Coordinate,
+      span: CoordinateSpan,
+    ): CoordinateRegion;
   }
 }
