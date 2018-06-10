@@ -43,6 +43,9 @@ type Props = {
 
   showsUserLocation: boolean,
   tracksUserLocation: boolean,
+
+  rotation?: number,
+  animateRotationChange: boolean,
 }
 
 type State = {
@@ -71,6 +74,9 @@ class MapKit extends React.Component<Props, State> {
 
     showsUserLocation: false,
     tracksUserLocation: false,
+
+    rotation: 0,
+    animateRotationChange: true,
   }
 
   state = {
@@ -135,11 +141,18 @@ class MapKit extends React.Component<Props, State> {
     this.map.showsUserLocation = props.showsUserLocation
     this.map.tracksUserLocation = props.tracksUserLocation
 
-    if (props.center) {
-      this.map.setCenterAnimated(
-        this.createCoordinate(props.center),
-        props.animateCenterChange,
-      )
+    const newCenter = props.center
+      ? this.createCoordinate(props.center)
+      : this.createCoordinate([0, 0])
+
+    if (!newCenter.equals(this.map.center)) {
+      this.map.setCenterAnimated(newCenter, props.animateCenterChange)
+    }
+
+    const newRotation = props.rotation ? props.rotation : 0
+
+    if (!this.map.rotation !== newRotation) {
+      this.map.setRotationAnimated(newRotation, props.animateRotationChange)
     }
   }
 
@@ -215,6 +228,9 @@ class MapKit extends React.Component<Props, State> {
 
       showsUserLocation,
       tracksUserLocation,
+
+      rotation,
+      animateRotationChange,
 
       ...otherProps
     } = this.props
