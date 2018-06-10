@@ -39,7 +39,6 @@ type Props = {
   animateViewChange: boolean,
   rotation?: number,
   animateRotationChange: boolean,
-  // visibleMapRect
 
   // Configuring the Map's Appearance
   mapType: MapType,

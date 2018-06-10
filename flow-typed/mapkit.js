@@ -1,5 +1,12 @@
 declare module 'mapkit' {
-  declare export type FeatureVisibility = 'adaptive' | 'hidden' | 'visible'
+  declare type FeatureVisibilityAdaptive = 'adaptive'
+  declare type FeatureVisibilityHidden = 'hidden'
+  declare type FeatureVisibilityVisible = 'adaptive'
+
+  declare export type FeatureVisibility =
+    | FeatureVisibilityAdaptive
+    | FeatureVisibilityHidden
+    | FeatureVisibilityVisible
   declare export type MapType = 'hybrid' | 'satellite' | 'standard'
   declare export type PaddingOptions = {
     top?: number,
@@ -13,9 +20,16 @@ declare module 'mapkit' {
     minimumSpan?: CoordinateSpan,
   }
 
-  declare type Annotation = {
-    //todo
+  declare type CollisionModeCircle = 'circle'
+  declare type CollisionModeRectangle = 'rectangle'
+  declare type CollisionMode = CollisionModeCircle | CollisionModeRectangle
+
+  declare type ImageUrl = {
+    '1': string,
+    '2'?: string,
+    '3'?: string,
   }
+
   declare type ClusterAnnnotation = {
     //todo
   }
@@ -72,6 +86,45 @@ declare module 'mapkit' {
     showsUserLocationControl?: boolean,
 
     element: HTMLElement,
+  }
+
+  declare type AnnotationConstructorOptions = {
+    data?: {},
+    title?: string,
+    subtitle?: string,
+    anchorOffset?: DOMPoint,
+    appearanceAnimation?: string,
+    displayPriority?: number,
+    size?: { width: number, height: number },
+    visible?: boolean,
+
+    animates?: boolean,
+    draggable?: boolean,
+    enabled?: boolean,
+    selected?: boolean,
+
+    callout?: (annotation: Annotation) => HTMLElement,
+    calloutEnabled?: boolean,
+    calloutOffset?: DOMPoint,
+
+    clusteringIdentifier?: string,
+    collisionMode?: CollisionMode,
+
+    accessibilityLabel?: string,
+  }
+
+  declare type ImageAnnotationConstructorOptions = AnnotationConstructorOptions & {
+    url: ImageUrl,
+  }
+
+  declare type MarkerAnnotationConstructorOptions = AnnotationConstructorOptions & {
+    color?: string,
+    glyphColor?: string,
+    glyphImage?: ImageUrl,
+    glyphText?: string,
+    selectedGlyphImage?: ImageUrl,
+    subtitleVisibility?: FeatureVisibility,
+    titleVisibility?: FeatureVisibility,
   }
 
   declare export class MapPoint {
@@ -137,6 +190,18 @@ declare module 'mapkit' {
     equals: (CoordinateRegion) => boolean;
     toBoundingRegion: () => BoundingRegion;
     toMapRect: () => MapRect;
+  }
+
+  declare export class Annotation {
+    DisplayPriority: {
+      High: 750,
+      Low: 250,
+      Required: 1000,
+    };
+    CollisionMode: {
+      Circle: CollisionModeCircle,
+      Rectangle: CollisionModeRectangle,
+    };
   }
 
   declare class Padding {
@@ -232,6 +297,15 @@ declare module 'mapkit' {
   }
 
   declare export default class MapKit {
+    build: string;
+    language: string;
+    version: string;
+    FeatureVisibility: {
+      Adaptive: FeatureVisibilityAdaptive,
+      Hidden: FeatureVisibilityHidden,
+      Visible: FeatureVisibilityVisible,
+    };
+
     init(MapKitInitOptions): void;
     Map(domId?: string, ?MapConstructorOptions): Map;
     Padding(PaddingOptions): Padding;
@@ -247,5 +321,21 @@ declare module 'mapkit' {
     MapPoint(x: number, y: number): MapPoint;
     MapRect(x: number, y: number, width: number, height: number): MapRect;
     MapSize(width: number, height: number): MapSize;
+    Annotation(
+      coordinate: Coordinate,
+      factory: (
+        coordinate: Coordinate,
+        options: AnnotationConstructorOptions,
+      ) => HTMLElement,
+      options: AnnotationConstructorOptions,
+    ): Annotation;
+    ImageAnnotation(
+      coordinate: Coordinate,
+      options: ImageAnnotationConstructorOptions,
+    ): Annotation;
+    MarkerAnnotation(
+      coordinate: Coordinate,
+      options: MarkerAnnotationConstructorOptions,
+    ): Annotation;
   }
 }
