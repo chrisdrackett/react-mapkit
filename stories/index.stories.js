@@ -7,16 +7,15 @@ import devToken from '../devToken'
 import MapKit from '../src'
 
 storiesOf('MapKit', module)
-  .add('all props', () => (
+  .add('Map Controls', () => (
     <MapKit
       style={{ width: '100vw', height: '100vh' }}
-      token={text('token', devToken)}
+      token={devToken}
       mapType={select(
         'mapType',
         { standard: 'standard', satellite: 'satellite', hybrid: 'hybrid' },
         'standard',
       )}
-      padding={number('padding', 0)}
       showsCompass={select(
         'showsCompass',
         { adaptive: 'adaptive', hidden: 'hidden', visible: 'visible' },
@@ -32,6 +31,44 @@ storiesOf('MapKit', module)
         'hidden',
       )}
       tintColor={text('tintColor', '')}
+      isRotationEnabled={boolean('isRotationEnabled', true)}
+      isScrollEnabled={boolean('isScrollEnabled', true)}
+      isZoomEnabled={boolean('isZoomEnabled', true)}
+      showsUserLocation={boolean('showsUserLocation', false)}
+      tracksUserLocation={boolean('tracksUserLocation', false)}
+    />
+  ))
+  .add('Map Padding (single)', () => (
+    <MapKit
+      style={{ width: '100vw', height: '100vh' }}
+      token={devToken}
+      padding={number('padding', 0)}
+    />
+  ))
+  .add('Map Padding (individual)', () => (
+    <MapKit
+      style={{ width: '100vw', height: '100vh' }}
+      token={devToken}
+      padding={{
+        top: number('padding top', 0),
+        right: number('padding right', 0),
+        bottom: number('padding bottom', 0),
+        left: number('padding left', 0),
+      }}
+    />
+  ))
+  .add('Rotation', () => (
+    <MapKit
+      style={{ width: '100vw', height: '100vh' }}
+      token={devToken}
+      rotation={number('rotation', 0)}
+      animateRotationChange={boolean('animateRotationChange', true)}
+    />
+  ))
+  .add('View (Center and Span)', () => (
+    <MapKit
+      style={{ width: '100vw', height: '100vh' }}
+      token={devToken}
       center={[
         number('center latitude', 47.6063889),
         number('center longitude', -122.3308333),
@@ -41,24 +78,18 @@ storiesOf('MapKit', module)
         number('span longitude delta', 0.016),
       ]}
       animateViewChange={boolean('animateViewChange', true)}
-      isRotationEnabled={boolean('isRotationEnabled', true)}
-      isScrollEnabled={boolean('isScrollEnabled', true)}
-      isZoomEnabled={boolean('isZoomEnabled', true)}
-      showsUserLocation={boolean('showsUserLocation', false)}
-      tracksUserLocation={boolean('tracksUserLocation', false)}
-      rotation={number('rotation', 0)}
-      animateRotationChange={boolean('animateRotationChange', true)}
     />
   ))
-  .add('individual padding values', () => (
+  .add('View (MapRect)', () => (
     <MapKit
       style={{ width: '100vw', height: '100vh' }}
       token={devToken}
-      padding={{
-        top: number('top', 0),
-        right: number('right', 0),
-        bottom: number('bottom', 0),
-        left: number('left', 0),
-      }}
+      mapRect={[
+        number('x', 0.155),
+        number('y', 0.345),
+        number('width', 0.03),
+        number('height', 0.04),
+      ]}
+      animateViewChange={boolean('animateViewChange', true)}
     />
   ))

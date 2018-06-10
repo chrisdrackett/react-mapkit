@@ -17,6 +17,7 @@ import invariant from 'invariant'
 import ErrorBoundry from './ErrorBoundry'
 
 type NumberTuple = [number, number]
+type Rect = [number, number, number, number]
 type PaddingType = number | PaddingOptions
 
 type Props = {
@@ -34,11 +35,11 @@ type Props = {
   // Manipulating the Visible Portion of the Map
   center?: NumberTuple,
   span?: NumberTuple,
+  mapRect?: Rect,
   animateViewChange: boolean,
   rotation?: number,
   animateRotationChange: boolean,
   // visibleMapRect
-  // animateMapRectChange
 
   // Configuring the Map's Appearance
   mapType: MapType,
@@ -84,7 +85,7 @@ class MapKit extends React.Component<Props, State> {
     showsUserLocationControl: false,
     showsPointsOfInterest: true,
     showsScale: 'hidden',
-    animateCenterChange: true,
+    animateViewChange: true,
     isRotationEnabled: true,
     isScrollEnabled: true,
     isZoomEnabled: true,
@@ -158,37 +159,55 @@ class MapKit extends React.Component<Props, State> {
     this.map.showsUserLocation = props.showsUserLocation
     this.map.tracksUserLocation = props.tracksUserLocation
 
-    // Map Center
-    let newCenter = this.createCoordinate(0, 0)
-    let newSpan
+    // Map View Area
 
-    if (props.center) {
+    if (props.mapRect) {
+      let newRect
       try {
-        newCenter = this.createCoordinate(props.center[0], props.center[1])
+        newRect = this.createMapRect(
+          props.mapRect[0],
+          props.mapRect[1],
+          props.mapRect[2],
+          props.mapRect[3],
+        )
       } catch (e) {
         console.warn(e.message)
       }
-    }
-
-    if (props.span) {
-      try {
-        newSpan = this.createCoordinateSpan(props.span[0], props.span[1])
-      } catch (e) {
-        console.warn(e.message)
-      }
-    }
-
-    if (newSpan) {
-      // if we have a span we'll set a region
-      const newRegion = this.createCoordinateRegion(newCenter, newSpan)
-
-      if (!newRegion.equals(this.map.region)) {
-        this.map.setRegionAnimated(newRegion, props.animateViewChange)
+      if (newRect && !newRect.equals(this.map.visibleMapRect)) {
+        this.map.setVisibleMapRectAnimated(newRect, props.animateViewChange)
       }
     } else {
-      // otherwise we just set the center
-      if (!newCenter.equals(this.map.center)) {
-        this.map.setCenterAnimated(newCenter, props.animateViewChange)
+      let newCenter = this.createCoordinate(0, 0)
+      let newSpan
+
+      if (props.center) {
+        try {
+          newCenter = this.createCoordinate(props.center[0], props.center[1])
+        } catch (e) {
+          console.warn(e.message)
+        }
+
+        if (props.span) {
+          try {
+            newSpan = this.createCoordinateSpan(props.span[0], props.span[1])
+          } catch (e) {
+            console.warn(e.message)
+          }
+        }
+
+        if (newSpan) {
+          // if we have a span we'll set a region
+          const newRegion = this.createCoordinateRegion(newCenter, newSpan)
+
+          if (!newRegion.equals(this.map.region)) {
+            this.map.setRegionAnimated(newRegion, props.animateViewChange)
+          }
+        } else {
+          // otherwise we just set the center
+          if (!newCenter.equals(this.map.center)) {
+            this.map.setCenterAnimated(newCenter, props.animateViewChange)
+          }
+        }
       }
     }
 
@@ -225,6 +244,14 @@ class MapKit extends React.Component<Props, State> {
 
   createCoordinateRegion = (center: Coordinate, span: CoordinateSpan) => {
     return new mapkit.CoordinateRegion(center, span)
+  }
+
+  createMapPoint = (x: number, y: number) => {
+    return new mapkit.MapPoint(x, y)
+  }
+
+  createMapRect = (x: number, y: number, width: number, height: number) => {
+    return new mapkit.MapRect(x, y, width, height)
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
@@ -275,6 +302,7 @@ class MapKit extends React.Component<Props, State> {
 
       center,
       span,
+      mapRect,
       animateViewChange,
 
       rotation,

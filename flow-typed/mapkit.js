@@ -13,9 +13,6 @@ declare module 'mapkit' {
     minimumSpan?: CoordinateSpan,
   }
 
-  declare type MapRect = {
-    //todo
-  }
   declare type Annotation = {
     //todo
   }
@@ -77,13 +74,41 @@ declare module 'mapkit' {
     element: HTMLElement,
   }
 
-  declare type MapPoint = {
-    x: number,
-    y: number,
+  declare export class MapPoint {
+    x: number;
+    y: number;
 
-    copy: () => MapPoint,
-    equals: (MapPoint) => boolean,
-    toCoordinate: () => Coordinate,
+    copy: () => MapPoint;
+    equals: (MapPoint) => boolean;
+    toCoordinate: () => Coordinate;
+  }
+
+  declare export class MapSize {
+    width: number;
+    height: number;
+
+    copy: () => MapSize;
+    equals: (MapSize) => boolean;
+  }
+
+  declare export class MapRect {
+    origin: MapPoint;
+    size: MapSize;
+
+    maxX: () => number;
+    maxY: () => number;
+
+    midX: () => number;
+    midY: () => number;
+
+    minX: () => number;
+    minY: () => number;
+
+    copy: () => MapRect;
+    equals: (MapRect) => boolean;
+
+    scale: (scaleFactor: number, scaleCenter: MapPoint) => MapRect;
+    toCoordinateRegion: () => CoordinateRegion;
   }
 
   declare export class Coordinate {
@@ -219,5 +244,8 @@ declare module 'mapkit' {
       center: Coordinate,
       span: CoordinateSpan,
     ): CoordinateRegion;
+    MapPoint(x: number, y: number): MapPoint;
+    MapRect(x: number, y: number, width: number, height: number): MapRect;
+    MapSize(width: number, height: number): MapSize;
   }
 }
