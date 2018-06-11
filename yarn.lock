@@ -3984,9 +3984,9 @@ flatten@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
 
-flow-bin@0.73.x:
-  version "0.73.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.73.0.tgz#da1b90a02b0ef9c439f068c2fc14968db83be425"
+flow-bin@0.74.x:
+  version "0.74.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.74.0.tgz#8017bb00efb37cbe8d81fbb7f464038bde06adc9"
 
 flush-write-stream@^1.0.0:
   version "1.0.3"
@@ -4948,7 +4948,7 @@ into-stream@^3.1.0:
     from2 "^2.1.1"
     p-is-promise "^1.1.0"
 
-invariant@^2.2.2, invariant@^2.2.4:
+invariant@2.2.x, invariant@^2.2.2:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   dependencies:

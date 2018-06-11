@@ -24,6 +24,8 @@ declare module 'mapkit' {
   declare type CollisionModeRectangle = 'rectangle'
   declare type CollisionMode = CollisionModeCircle | CollisionModeRectangle
 
+  declare type Callout = (annotation: Annotation) => HTMLElement
+
   declare type ImageUrl = {
     '1': string,
     '2'?: string,
@@ -88,7 +90,7 @@ declare module 'mapkit' {
     element: HTMLElement,
   }
 
-  declare type AnnotationConstructorOptions = {
+  declare export type AnnotationConstructorOptions = {
     data?: {},
     title?: string,
     subtitle?: string,
@@ -113,11 +115,11 @@ declare module 'mapkit' {
     accessibilityLabel?: string,
   }
 
-  declare type ImageAnnotationConstructorOptions = AnnotationConstructorOptions & {
+  declare export type ImageAnnotationConstructorOptions = AnnotationConstructorOptions & {
     url: ImageUrl,
   }
 
-  declare type MarkerAnnotationConstructorOptions = AnnotationConstructorOptions & {
+  declare export type MarkerAnnotationConstructorOptions = AnnotationConstructorOptions & {
     color?: string,
     glyphColor?: string,
     glyphImage?: ImageUrl,
@@ -192,18 +194,6 @@ declare module 'mapkit' {
     toMapRect: () => MapRect;
   }
 
-  declare export class Annotation {
-    DisplayPriority: {
-      High: 750,
-      Low: 250,
-      Required: 1000,
-    };
-    CollisionMode: {
-      Circle: CollisionModeCircle,
-      Rectangle: CollisionModeRectangle,
-    };
-  }
-
   declare class Padding {
     top: number;
     right: number;
@@ -214,6 +204,48 @@ declare module 'mapkit' {
   declare class DOMPoint {
     x: number;
     y: number;
+  }
+
+  declare export class Annotation {
+    coordinate: Coordinate;
+
+    data: {};
+    title: ?string;
+    subtitle: ?string;
+
+    anchorOffset: DOMPoint;
+    appearanceAnimation: ?string;
+    displayPriority: number;
+    size: MapSize;
+    visible: boolean;
+
+    animates: boolean;
+    draggable: boolean;
+    selected: boolean;
+    enabled: boolean;
+
+    map: Map;
+    element: HTMLElement;
+
+    callout: Callout;
+    calloutEnabled: boolean;
+    calloutOffset: DOMPoint;
+
+    memberAnnotations: Array<?Annotation>;
+    clusteringIdentifier: string;
+    collisionMode: CollisionMode;
+
+    accessibilityLabel: string;
+
+    DisplayPriority: {
+      High: 750,
+      Low: 250,
+      Required: 1000,
+    };
+    CollisionMode: {
+      Circle: CollisionModeCircle,
+      Rectangle: CollisionModeRectangle,
+    };
   }
 
   declare export class Map {
@@ -335,7 +367,7 @@ declare module 'mapkit' {
     ): Annotation;
     MarkerAnnotation(
       coordinate: Coordinate,
-      options: MarkerAnnotationConstructorOptions,
+      options?: MarkerAnnotationConstructorOptions,
     ): Annotation;
   }
 }

@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react'
 import { text, boolean, number, select } from '@storybook/addon-knobs/react'
 
 import devToken from '../devToken'
-import { MapKit } from '../src'
+import { MapKit, Marker } from '../src'
 
 storiesOf('MapKit', module)
   .add('Map Controls', () => (
@@ -92,4 +92,17 @@ storiesOf('MapKit', module)
       ]}
       animateViewChange={boolean('animateViewChange', true)}
     />
+  ))
+  .add('Markers', () => (
+    <MapKit
+      style={{ width: '100vw', height: '100vh' }}
+      token={devToken}
+      center={[47.6063889, -122.3308333]}
+      span={[0.016, 0.016]}
+    >
+      <Marker
+        latitude={number('marker latitune', 47.6063889)}
+        longitude={number('marker longitude', -122.3308333)}
+      />
+    </MapKit>
   ))

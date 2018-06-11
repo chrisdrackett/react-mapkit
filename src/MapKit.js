@@ -63,6 +63,8 @@ type Props = {
   // Displaying the User's Location
   showsUserLocation: boolean,
   tracksUserLocation: boolean,
+
+  children: React.Node,
 }
 
 type State = {
@@ -71,6 +73,8 @@ type State = {
 
 const defaultPropsErrorText =
   "Either a `callbackUrl` or `token` is required for the `MapKit` component. One of these props must be set on init and can't be updated after the component is setup."
+
+export const MapKitContext = React.createContext() // todo: <Map | void>
 
 class MapKit extends React.Component<Props, State> {
   map: Map
@@ -269,9 +273,12 @@ class MapKit extends React.Component<Props, State> {
     let ComponentShouldUpdate = false
 
     // might be needed when we start adding markers, but for now not a thing we do
-    // if (this.props.children !== nextProps.children) {
-    //   ComponentShouldUpdate = true
-    // }
+    if (
+      this.props.children !== nextProps.children ||
+      this.state.mapKitIsReady != nextState.mapKitIsReady
+    ) {
+      ComponentShouldUpdate = true
+    }
 
     if (this.state.mapKitIsReady) {
       this.updateMapProps(nextProps)
@@ -314,10 +321,17 @@ class MapKit extends React.Component<Props, State> {
       showsUserLocation,
       tracksUserLocation,
 
+      children,
       ...otherProps
     } = this.props
 
-    return <div id="map" {...otherProps} />
+    return (
+      <div id="map" {...otherProps}>
+        <MapKitContext.Provider value={this.map}>
+          {this.state.mapKitIsReady && children}
+        </MapKitContext.Provider>
+      </div>
+    )
   }
 }
 
