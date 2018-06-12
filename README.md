@@ -5,7 +5,7 @@
 
 ### ⚠️ Note ⚠️
 
-This project is still in development and is missing features (including being able to place anyhing on a map). Contributions are welcome!
+This project is still in development and is missing features (including being able to place anyhing other than markers on a map). Contributions are welcome!
 
 See the [demo storybook](https://chrisdrackett.github.io/react-mapkit/?selectedStory=all%20props&full=0&addons=1&stories=1&panelRight=1&addonPanel=storybooks%2Fstorybook-addon-knobs)!
 
