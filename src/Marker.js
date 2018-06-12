@@ -5,6 +5,7 @@ import type MapKitType, {
   MarkerAnnotationConstructorOptions,
   Map,
   Annotation,
+  FeatureVisibility,
 } from 'mapkit'
 
 declare var mapkit: MapKitType
@@ -15,23 +16,25 @@ type Props = MarkerAnnotationConstructorOptions & {
   map: Map,
   latitude: number,
   longitude: number,
-
-  title?: string,
-  subtitle?: string,
 }
 
 class Marker extends React.Component<Props> {
   marker: Annotation
 
+  getMarkerConstructionProps = (props: Props) => {
+    const { map, latitude, longitude, ...otherProps } = props
+
+    return otherProps
+  }
+
   constructor(props: Props) {
     super(props)
 
+    const markerProps = this.getMarkerConstructionProps(props)
+
     this.marker = new mapkit.MarkerAnnotation(
       new mapkit.Coordinate(props.latitude, props.longitude),
-      {
-        title: props.title,
-        subtitle: props.subtitle,
-      },
+      markerProps,
     )
 
     this.props.map.addAnnotation(this.marker)
@@ -48,8 +51,11 @@ class Marker extends React.Component<Props> {
       )
     }
 
-    this.marker.title = nextProps.title
-    this.marker.subtitle = nextProps.subtitle
+    const markerProps = this.getMarkerConstructionProps(nextProps)
+
+    Object.keys(markerProps).forEach((key) => {
+      this.marker[key] = markerProps[key]
+    })
 
     return false
   }

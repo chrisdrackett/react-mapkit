@@ -105,6 +105,9 @@ storiesOf('MapKit', module)
         longitude={number('marker longitude', -122.3308333)}
         title={text('title', 'marker title')}
         subtitle={text('subtitle', 'marker subtitle')}
+        glyphText={text('glyphText', '')}
+        color={text('color', '#ff5b40')}
+        glyphColor={text('glyphColor', 'white')}
       />
     </MapKit>
   ))
