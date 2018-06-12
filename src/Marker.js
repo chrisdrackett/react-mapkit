@@ -15,6 +15,9 @@ type Props = MarkerAnnotationConstructorOptions & {
   map: Map,
   latitude: number,
   longitude: number,
+
+  title?: string,
+  subtitle?: string,
 }
 
 class Marker extends React.Component<Props> {
@@ -25,6 +28,10 @@ class Marker extends React.Component<Props> {
 
     this.marker = new mapkit.MarkerAnnotation(
       new mapkit.Coordinate(props.latitude, props.longitude),
+      {
+        title: props.title,
+        subtitle: props.subtitle,
+      },
     )
 
     this.props.map.addAnnotation(this.marker)
@@ -40,6 +47,10 @@ class Marker extends React.Component<Props> {
         nextProps.longitude,
       )
     }
+
+    this.marker.title = nextProps.title
+    this.marker.subtitle = nextProps.subtitle
+
     return false
   }
 

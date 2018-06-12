@@ -103,6 +103,8 @@ storiesOf('MapKit', module)
       <Marker
         latitude={number('marker latitune', 47.6063889)}
         longitude={number('marker longitude', -122.3308333)}
+        title={text('title', 'marker title')}
+        subtitle={text('subtitle', 'marker subtitle')}
       />
     </MapKit>
   ))
