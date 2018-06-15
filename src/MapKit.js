@@ -4,7 +4,7 @@ import * as React from 'react'
 import load from 'little-loader'
 import invariant from 'invariant'
 
-import ErrorBoundry from './ErrorBoundry'
+import ErrorBoundary from './ErrorBoundary'
 
 import type MapKitType, {
   FeatureVisibility,
@@ -336,7 +336,7 @@ class MapKit extends React.Component<Props, State> {
 }
 
 export default (props: Props) => (
-  <ErrorBoundry errorText={defaultPropsErrorText}>
+  <ErrorBoundary errorText={defaultPropsErrorText}>
     <MapKit {...props} />
-  </ErrorBoundry>
+  </ErrorBoundary>
 )
