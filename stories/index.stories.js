@@ -1,7 +1,13 @@
 import React from 'react'
 
 import { storiesOf } from '@storybook/react'
-import { text, boolean, number, select } from '@storybook/addon-knobs/react'
+import {
+  text,
+  boolean,
+  number,
+  select,
+  button,
+} from '@storybook/addon-knobs/react'
 
 import devToken from '../devToken'
 import { MapKit, Marker } from '../src'
@@ -57,42 +63,50 @@ storiesOf('MapKit', module)
       }}
     />
   ))
-  .add('Rotation', () => (
+  .add('Default Center and Rotation', () => (
     <MapKit
       style={{ width: '100vw', height: '100vh' }}
       token={devToken}
-      rotation={number('rotation', 0)}
-      animateRotationChange={boolean('animateRotationChange', true)}
+      defaultRotation={30}
+      defaultCenter={[47.6063889, -122.3308333]}
     />
   ))
-  .add('View (Center and Span)', () => (
-    <MapKit
-      style={{ width: '100vw', height: '100vh' }}
-      token={devToken}
-      center={[
-        number('center latitude', 47.6063889),
-        number('center longitude', -122.3308333),
-      ]}
-      span={[
-        number('span latitude delta', 0.016),
-        number('span longitude delta', 0.016),
-      ]}
-      animateViewChange={boolean('animateViewChange', true)}
-    />
-  ))
-  .add('View (MapRect)', () => (
-    <MapKit
-      style={{ width: '100vw', height: '100vh' }}
-      token={devToken}
-      mapRect={[
-        number('x', 0.155),
-        number('y', 0.345),
-        number('width', 0.03),
-        number('height', 0.04),
-      ]}
-      animateViewChange={boolean('animateViewChange', true)}
-    />
-  ))
+  // .add('Rotation', () => (
+  //   <MapKit
+  //     style={{ width: '100vw', height: '100vh' }}
+  //     token={devToken}
+  //     rotation={number('rotation', 0)}
+  //     animateRotationChange={boolean('animateRotationChange', true)}
+  //   />
+  // ))
+  // .add('View (Center and Span)', () => (
+  //   <MapKit
+  //     style={{ width: '100vw', height: '100vh' }}
+  //     token={devToken}
+  //     center={[
+  //       number('center latitude', 47.6063889),
+  //       number('center longitude', -122.3308333),
+  //     ]}
+  //     span={[
+  //       number('span latitude delta', 0.016),
+  //       number('span longitude delta', 0.016),
+  //     ]}
+  //     animateViewChange={boolean('animateViewChange', true)}
+  //   />
+  // ))
+  // .add('View (MapRect)', () => (
+  //   <MapKit
+  //     style={{ width: '100vw', height: '100vh' }}
+  //     token={devToken}
+  //     mapRect={[
+  //       number('x', 0.155),
+  //       number('y', 0.345),
+  //       number('width', 0.03),
+  //       number('height', 0.04),
+  //     ]}
+  //     animateViewChange={boolean('animateViewChange', true)}
+  //   />
+  // ))
   .add('Markers', () => (
     <MapKit
       style={{ width: '100vw', height: '100vh' }}

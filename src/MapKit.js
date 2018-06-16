@@ -13,6 +13,8 @@ import type MapKitType, {
   PaddingOptions,
   Coordinate,
   CoordinateSpan,
+  MapConstructorOptions,
+  CoordinateRegion,
 } from 'mapkit'
 declare var mapkit: MapKitType
 
@@ -32,13 +34,15 @@ type Props = {
   isScrollEnabled: boolean,
   isZoomEnabled: boolean,
 
-  // Manipulating the Visible Portion of the Map
-  center?: NumberTuple,
-  span?: NumberTuple,
-  mapRect?: Rect,
+  // Should programatic view / rotation changes be animated?
   animateViewChange: boolean,
-  rotation?: number,
   animateRotationChange: boolean,
+
+  // Default View of the Map
+  defaultCenter?: NumberTuple,
+  defaultSpan?: NumberTuple,
+  defaultMapRect?: Rect,
+  defaultRotation?: number,
 
   // Configuring the Map's Appearance
   mapType: MapType,
@@ -134,9 +138,63 @@ class MapKit extends React.Component<Props, State> {
       throw defaultPropsErrorText
     }
 
-    this.map = new mapkit.Map('map')
+    // Setup Default Map Options
 
-    this.updateMapProps(props)
+    let mapOptions: MapConstructorOptions = {
+      rotation: props.defaultRotation || undefined,
+    }
+
+    if (props.defaultMapRect) {
+      try {
+        mapOptions.visibleMapRect = this.createMapRect(
+          props.defaultMapRect[0],
+          props.defaultMapRect[1],
+          props.defaultMapRect[2],
+          props.defaultMapRect[3],
+        )
+      } catch (e) {
+        console.warn(e.message)
+      }
+    } else {
+      let mapCenter = this.createCoordinate(0, 0)
+      let mapSpan
+
+      if (props.defaultCenter) {
+        try {
+          mapCenter = this.createCoordinate(
+            props.defaultCenter[0],
+            props.defaultCenter[1],
+          )
+        } catch (e) {
+          console.warn(e.message)
+        }
+
+        if (props.defaultSpan) {
+          try {
+            mapSpan = this.createCoordinateSpan(
+              props.defaultSpan[0],
+              props.defaultSpan[1],
+            )
+          } catch (e) {
+            console.warn(e.message)
+          }
+        }
+
+        if (mapSpan) {
+          // if we have a span we'll set a region
+          mapOptions.region = this.createCoordinateRegion(mapCenter, mapSpan)
+        } else {
+          // otherwise we just set the center
+          mapOptions.center = mapCenter
+        }
+      }
+    }
+
+    // Create the 🗺️!
+    this.map = new mapkit.Map('map', mapOptions)
+
+    // Set Other Props
+    // this.updateMapProps(props)
 
     this.setState({ mapKitIsReady: true })
   }
@@ -161,67 +219,6 @@ class MapKit extends React.Component<Props, State> {
     this.map.isZoomEnabled = props.isZoomEnabled
     this.map.showsUserLocation = props.showsUserLocation
     this.map.tracksUserLocation = props.tracksUserLocation
-
-    // Map View Area
-
-    if (props.mapRect) {
-      let newRect
-      try {
-        newRect = this.createMapRect(
-          props.mapRect[0],
-          props.mapRect[1],
-          props.mapRect[2],
-          props.mapRect[3],
-        )
-      } catch (e) {
-        console.warn(e.message)
-      }
-      if (newRect && !newRect.equals(this.map.visibleMapRect)) {
-        this.map.setVisibleMapRectAnimated(newRect, props.animateViewChange)
-      }
-    } else {
-      let newCenter = this.createCoordinate(0, 0)
-      let newSpan
-
-      if (props.center) {
-        try {
-          newCenter = this.createCoordinate(props.center[0], props.center[1])
-        } catch (e) {
-          console.warn(e.message)
-        }
-
-        if (props.span) {
-          try {
-            newSpan = this.createCoordinateSpan(props.span[0], props.span[1])
-          } catch (e) {
-            console.warn(e.message)
-          }
-        }
-
-        if (newSpan) {
-          // if we have a span we'll set a region
-          const newRegion = this.createCoordinateRegion(newCenter, newSpan)
-
-          if (!newRegion.equals(this.map.region)) {
-            this.map.setRegionAnimated(newRegion, props.animateViewChange)
-          }
-        } else {
-          // otherwise we just set the center
-          if (!newCenter.equals(this.map.center)) {
-            this.map.setCenterAnimated(newCenter, props.animateViewChange)
-          }
-        }
-      }
-    }
-
-    // Map Rotation
-    const newRotation = props.rotation ? props.rotation : 0
-
-    if (!this.map.rotation !== newRotation) {
-      this.map.setRotationAnimated(newRotation, props.animateRotationChange)
-    }
-
-    // Map Region
   }
 
   createPadding = (padding: PaddingType) => {
@@ -245,7 +242,10 @@ class MapKit extends React.Component<Props, State> {
     return new mapkit.CoordinateSpan(latitudeDelta, longitudeDelta)
   }
 
-  createCoordinateRegion = (center: Coordinate, span: CoordinateSpan) => {
+  createCoordinateRegion = (
+    center: Coordinate,
+    span: CoordinateSpan,
+  ): CoordinateRegion => {
     return new mapkit.CoordinateRegion(center, span)
   }
 
@@ -306,12 +306,12 @@ class MapKit extends React.Component<Props, State> {
       showsScale,
       tintColor,
 
-      center,
-      span,
-      mapRect,
-      animateViewChange,
+      defaultCenter,
+      defaultSpan,
+      defaultMapRect,
+      defaultRotation,
 
-      rotation,
+      animateViewChange,
       animateRotationChange,
 
       isRotationEnabled,
