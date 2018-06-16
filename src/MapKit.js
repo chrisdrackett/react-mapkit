@@ -29,6 +29,12 @@ type Props = {
   callbackUrl?: string,
   token?: string,
 
+  // Default View of the Map
+  defaultCenter?: NumberTuple,
+  defaultSpan?: NumberTuple,
+  defaultMapRect?: Rect,
+  defaultRotation?: number,
+
   // Interaction Properties
   isRotationEnabled: boolean,
   isScrollEnabled: boolean,
@@ -37,12 +43,6 @@ type Props = {
   // Should programatic view / rotation changes be animated?
   animateViewChange: boolean,
   animateRotationChange: boolean,
-
-  // Default View of the Map
-  defaultCenter?: NumberTuple,
-  defaultSpan?: NumberTuple,
-  defaultMapRect?: Rect,
-  defaultRotation?: number,
 
   // Configuring the Map's Appearance
   mapType: MapType,
