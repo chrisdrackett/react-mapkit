@@ -58,7 +58,7 @@ declare module 'mapkit' {
   declare type OverlayArray = Array<?Overlay>
   declare type TileOverlayArray = Array<?TileOverlay>
 
-  declare type MapConstructorOptions = {
+  declare export type MapConstructorOptions = {
     visibleMapRect?: MapRect,
     region?: CoordinateRegion,
     center?: Coordinate,
@@ -87,7 +87,7 @@ declare module 'mapkit' {
     userLocationAnnotation?: ?Annotation,
     showsUserLocationControl?: boolean,
 
-    element: HTMLElement,
+    element?: HTMLElement,
   }
 
   declare export type AnnotationConstructorOptions = {
