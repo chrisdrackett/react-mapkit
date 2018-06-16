@@ -258,17 +258,6 @@ class MapKit extends React.Component<Props, State> {
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
-    // make sure we have at least one init prop
-    this.checkProps(nextProps)
-
-    // if our init props have changed, throw an error, we currently don't re-init the map
-    if (
-      this.props.token !== nextProps.token ||
-      this.props.callbackUrl !== nextProps.callbackUrl
-    ) {
-      invariant(false, defaultPropsErrorText)
-    }
-
     // for a lot of prop changes we're just making calls to mapKit so we have no need to re-render
     let ComponentShouldUpdate = false
 
