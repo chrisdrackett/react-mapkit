@@ -100,7 +100,6 @@ class MapKit extends React.Component<Props, State> {
     showsUserLocation: false,
     tracksUserLocation: false,
 
-    rotation: 0,
     animateRotationChange: true,
   }
 
@@ -194,7 +193,7 @@ class MapKit extends React.Component<Props, State> {
     this.map = new mapkit.Map('map', mapOptions)
 
     // Set Other Props
-    // this.updateMapProps(props)
+    this.updateMapProps(props)
 
     this.setState({ mapKitIsReady: true })
   }
