@@ -137,15 +137,21 @@ class MapKit extends React.Component<Props, State> {
       throw defaultPropsErrorText
     }
 
-    // Setup Default Map Options
+    // Create the 🗺️!
+    this.map = new mapkit.Map('map')
 
-    let mapOptions: MapConstructorOptions = {
-      rotation: props.defaultRotation || undefined,
-    }
+    // Setup Default Map Options
+    // in theory this should be possible to set via the above via:
+    // https://developer.apple.com/documentation/mapkitjs/mapconstructoroptions
+    // but it is not working as expected.
+    //
+    // radar: https://bugreport.apple.com/web/?problemID=41190232
+
+    if (props.defaultRotation) this.map.rotation = props.defaultRotation
 
     if (props.defaultMapRect) {
       try {
-        mapOptions.visibleMapRect = this.createMapRect(
+        this.map.visibleMapRect = this.createMapRect(
           props.defaultMapRect[0],
           props.defaultMapRect[1],
           props.defaultMapRect[2],
@@ -181,16 +187,13 @@ class MapKit extends React.Component<Props, State> {
 
         if (mapSpan) {
           // if we have a span we'll set a region
-          mapOptions.region = this.createCoordinateRegion(mapCenter, mapSpan)
+          this.map.region = this.createCoordinateRegion(mapCenter, mapSpan)
         } else {
           // otherwise we just set the center
-          mapOptions.center = mapCenter
+          this.map.center = mapCenter
         }
       }
     }
-
-    // Create the 🗺️!
-    this.map = new mapkit.Map('map', mapOptions)
 
     // Set Other Props
     this.updateMapProps(props)
