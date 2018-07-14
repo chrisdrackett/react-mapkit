@@ -66,7 +66,12 @@ type Props = {
   showsUserLocation: boolean,
   tracksUserLocation: boolean,
 
-  children: React.Node,
+  children:
+    | React.Node
+    | (({
+        setRotation: (number) => void,
+        setCenter: (NumberTuple) => void,
+      }) => React.Node),
 }
 
 type State = {
@@ -76,6 +81,7 @@ type State = {
 export const MapKitContext = React.createContext()
 
 export default class MapKit extends React.Component<Props, State> {
+  mapRef: ?React.Ref<'div'>
   map: Map
 
   static defaultProps = {
@@ -105,6 +111,8 @@ export default class MapKit extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
 
+    this.mapRef = React.createRef()
+
     load(
       'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js',
       () => this.initMap(props),
@@ -129,7 +137,7 @@ export default class MapKit extends React.Component<Props, State> {
     })
 
     // Create the 🗺️!
-    this.map = new mapkit.Map('map')
+    this.map = new mapkit.Map(this.mapRef.current)
 
     // Setup Default Map Options
     // in theory this should be possible to set via the above via:
@@ -248,25 +256,33 @@ export default class MapKit extends React.Component<Props, State> {
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
     // for a lot of prop changes we're just making calls to mapKit so we have no need to re-render
-    let ComponentShouldUpdate = false
-
-    // might be needed when we start adding markers, but for now not a thing we do
-    if (
-      this.props.children !== nextProps.children ||
-      this.state.mapKitIsReady != nextState.mapKitIsReady
-    ) {
-      ComponentShouldUpdate = true
-    }
+    // let ComponentShouldUpdate = false
+    //
+    // // might be needed when we start adding markers, but for now not a thing we do
+    // if (this.state.mapKitIsReady != nextState.mapKitIsReady) {
+    //   ComponentShouldUpdate = true
+    // }
 
     if (this.state.mapKitIsReady) {
       this.updateMapProps(nextProps)
     }
 
-    return ComponentShouldUpdate
+    return true
   }
 
   componentWillUnmount() {
     this.map.destroy()
+  }
+
+  setRotation = (rotation: number) => {
+    this.map.setRotationAnimated(rotation, this.props.animateRotationChange)
+  }
+
+  setCenter = ([lat, lng]: NumberTuple) => {
+    this.map.setCenterAnimated(
+      this.createCoordinate(lat, lng),
+      this.props.animateViewChange,
+    )
   }
 
   render() {
@@ -303,9 +319,15 @@ export default class MapKit extends React.Component<Props, State> {
     } = this.props
 
     return (
-      <div id="map" {...otherProps}>
+      <div ref={this.mapRef} {...otherProps}>
         <MapKitContext.Provider value={this.map}>
-          {this.state.mapKitIsReady && children}
+          {this.state.mapKitIsReady &&
+            (typeof children === 'function'
+              ? children({
+                  setRotation: this.setRotation,
+                  setCenter: this.setCenter,
+                })
+              : children)}
         </MapKitContext.Provider>
       </div>
     )

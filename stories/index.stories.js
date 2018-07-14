@@ -71,14 +71,25 @@ storiesOf('MapKit', module)
       defaultCenter={[47.6063889, -122.3308333]}
     />
   ))
-  // .add('Rotation', () => (
-  //   <MapKit
-  //     style={{ width: '100vw', height: '100vh' }}
-  //     tokenOrCallback={devToken}
-  //     rotation={number('rotation', 0)}
-  //     animateRotationChange={boolean('animateRotationChange', true)}
-  //   />
-  // ))
+  .add('Set Rotation or Center', () => {
+    const propSetter = ({ setRotation, setCenter }) => {
+      setRotation(number('rotation', 0) || 0)
+      setCenter([
+        number('center latitude', 47.6063889) || 47.6063889,
+        number('center longitude', -122.3308333) || -122.3308333,
+      ])
+    }
+
+    return (
+      <MapKit
+        style={{ width: '100vw', height: '100vh' }}
+        tokenOrCallback={devToken}
+        animateRotationChange={boolean('animateRotationChange', true)}
+      >
+        {propSetter}
+      </MapKit>
+    )
+  })
   // .add('View (Center and Span)', () => (
   //   <MapKit
   //     style={{ width: '100vw', height: '100vh' }}

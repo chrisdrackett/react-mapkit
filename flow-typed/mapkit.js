@@ -339,7 +339,7 @@ declare module 'mapkit' {
     };
 
     init(MapKitInitOptions): void;
-    Map(domId?: string, ?MapConstructorOptions): Map;
+    Map(parent?: string | HTMLElement, ?MapConstructorOptions): Map;
     Padding(PaddingOptions): Padding;
     Coordinate(latitude: number, longitude: number): Coordinate;
     CoordinateSpan(
