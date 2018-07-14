@@ -16,7 +16,7 @@ storiesOf('MapKit', module)
   .add('Map Controls', () => (
     <MapKit
       style={{ width: '100vw', height: '100vh' }}
-      token={devToken}
+      tokenOrCallback={devToken}
       mapType={select(
         'mapType',
         { standard: 'standard', satellite: 'satellite', hybrid: 'hybrid' },
@@ -47,14 +47,14 @@ storiesOf('MapKit', module)
   .add('Map Padding (single)', () => (
     <MapKit
       style={{ width: '100vw', height: '100vh' }}
-      token={devToken}
+      tokenOrCallback={devToken}
       padding={number('padding', 0)}
     />
   ))
   .add('Map Padding (individual)', () => (
     <MapKit
       style={{ width: '100vw', height: '100vh' }}
-      token={devToken}
+      tokenOrCallback={devToken}
       padding={{
         top: number('padding top', 0),
         right: number('padding right', 0),
@@ -66,7 +66,7 @@ storiesOf('MapKit', module)
   .add('Default Center and Rotation', () => (
     <MapKit
       style={{ width: '100vw', height: '100vh' }}
-      token={devToken}
+      tokenOrCallback={devToken}
       defaultRotation={30}
       defaultCenter={[47.6063889, -122.3308333]}
     />
@@ -74,7 +74,7 @@ storiesOf('MapKit', module)
   // .add('Rotation', () => (
   //   <MapKit
   //     style={{ width: '100vw', height: '100vh' }}
-  //     token={devToken}
+  //     tokenOrCallback={devToken}
   //     rotation={number('rotation', 0)}
   //     animateRotationChange={boolean('animateRotationChange', true)}
   //   />
@@ -82,7 +82,7 @@ storiesOf('MapKit', module)
   // .add('View (Center and Span)', () => (
   //   <MapKit
   //     style={{ width: '100vw', height: '100vh' }}
-  //     token={devToken}
+  //     tokenOrCallback={devToken}
   //     center={[
   //       number('center latitude', 47.6063889),
   //       number('center longitude', -122.3308333),
@@ -97,7 +97,7 @@ storiesOf('MapKit', module)
   // .add('View (MapRect)', () => (
   //   <MapKit
   //     style={{ width: '100vw', height: '100vh' }}
-  //     token={devToken}
+  //     tokenOrCallback={devToken}
   //     mapRect={[
   //       number('x', 0.155),
   //       number('y', 0.345),
@@ -110,7 +110,7 @@ storiesOf('MapKit', module)
   .add('Markers', () => (
     <MapKit
       style={{ width: '100vw', height: '100vh' }}
-      token={devToken}
+      tokenOrCallback={devToken}
       center={[47.6063889, -122.3308333]}
       span={[0.016, 0.016]}
     >

@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import load from 'little-loader'
-import invariant from 'invariant'
 
 import ErrorBoundry from './ErrorBoundry'
 
@@ -23,11 +22,10 @@ type Rect = [number, number, number, number]
 type PaddingType = number | PaddingOptions
 
 type Props = {
-  // Init Props
-  // ⚠️ These props are used for setup and can't be changed once set.
+  // ⚠️ This prop is used for setup and can't be changed once set.
   // ⚠️ Pick between callbackUrl or token.
-  callbackUrl?: string,
-  token?: string,
+  // https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init
+  tokenOrCallback: string,
 
   // Default View of the Map
   defaultCenter?: NumberTuple,
@@ -75,12 +73,9 @@ type State = {
   mapKitIsReady: boolean,
 }
 
-const defaultPropsErrorText =
-  "Either a `callbackUrl` or `token` is required for the `MapKit` component. One of these props must be set on init and can't be updated after the component is setup."
+export const MapKitContext = React.createContext()
 
-export const MapKitContext = React.createContext() // todo: <Map | void>
-
-class MapKit extends React.Component<Props, State> {
+export default class MapKit extends React.Component<Props, State> {
   map: Map
 
   static defaultProps = {
@@ -110,8 +105,6 @@ class MapKit extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
 
-    this.checkProps(props)
-
     load(
       'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js',
       () => this.initMap(props),
@@ -120,22 +113,20 @@ class MapKit extends React.Component<Props, State> {
   }
 
   initMap = (props: Props) => {
-    if (props.callbackUrl || props.token) {
-      mapkit.init({
-        authorizationCallback: (done) => {
-          if (props.callbackUrl) {
-            fetch(props.callbackUrl)
-              .then((res) => res.text())
-              .then(done)
-          }
-          if (props.token) {
-            done(props.token)
-          }
-        },
-      })
-    } else {
-      throw defaultPropsErrorText
-    }
+    const isCallback = props.tokenOrCallback.includes('/')
+
+    // init mapkit
+    mapkit.init({
+      authorizationCallback: (done) => {
+        if (isCallback) {
+          fetch(props.tokenOrCallback)
+            .then((res) => res.text())
+            .then(done)
+        } else {
+          done(props.tokenOrCallback)
+        }
+      },
+    })
 
     // Create the 🗺️!
     this.map = new mapkit.Map('map')
@@ -199,10 +190,6 @@ class MapKit extends React.Component<Props, State> {
     this.updateMapProps(props)
 
     this.setState({ mapKitIsReady: true })
-  }
-
-  checkProps = (props: Props) => {
-    invariant(props.callbackUrl || props.token, defaultPropsErrorText)
   }
 
   updateMapProps = (props: Props) => {
@@ -284,8 +271,7 @@ class MapKit extends React.Component<Props, State> {
 
   render() {
     const {
-      callbackUrl,
-      token,
+      tokenOrCallback,
 
       mapType,
       padding,
@@ -325,9 +311,3 @@ class MapKit extends React.Component<Props, State> {
     )
   }
 }
-
-export default (props: Props) => (
-  <ErrorBoundry errorText={defaultPropsErrorText}>
-    <MapKit {...props} />
-  </ErrorBoundry>
-)

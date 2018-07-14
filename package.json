@@ -35,7 +35,6 @@
     "react-dom": "16.4.x"
   },
   "dependencies": {
-    "invariant": "2.2.x",
     "little-loader": "^0.2.0"
   },
   "devDependencies": {
