@@ -72,21 +72,19 @@ storiesOf('MapKit', module)
     />
   ))
   .add('Set Rotation or Center', () => {
-    const propSetter = ({ setRotation, setCenter }) => {
-      setRotation(number('rotation', 0) || 0)
-      setCenter([
-        number('center latitude', 47.6063889) || 47.6063889,
-        number('center longitude', -122.3308333) || -122.3308333,
-      ])
-    }
-
     return (
       <MapKit
         style={{ width: '100vw', height: '100vh' }}
         tokenOrCallback={devToken}
         animateRotationChange={boolean('animateRotationChange', true)}
       >
-        {propSetter}
+        {({ setRotation, setCenter }) => {
+          setRotation(number('rotation', 0) || 0)
+          setCenter([
+            number('center latitude', 47.6063889) || 47.6063889,
+            number('center longitude', -122.3308333) || -122.3308333,
+          ])
+        }}
       </MapKit>
     )
   })

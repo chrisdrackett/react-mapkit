@@ -5,7 +5,7 @@
 
 ### ⚠️ Note ⚠️
 
-This project is still in development and is missing features (including being able to place anyhing other than markers on a map). Contributions are welcome!
+This project is still in development and is missing features (including being able to place anything other than markers on a map). Contributions are welcome!
 
 See the [demo storybook](https://chrisdrackett.github.io/react-mapkit/?selectedStory=all%20props&full=0&addons=1&stories=1&panelRight=1&addonPanel=storybooks%2Fstorybook-addon-knobs)!
 
@@ -33,14 +33,22 @@ This project contains a [storybook](https://storybook.js.org) that shows example
 
 ## MapKit Component
 
-This is the component that will render a map. You'll need to provide either a `callbackUrl` or a `token` for this component to work.
+This is the component that will render a map. You'll need to provide either a `callbackUrl` or a `token` to the `tokenOrCallback` prop for this component to work.
 
-### Props
+### Default Props
 
-#### `callbackUrl`: string
+You can set the initial view of the map using the props prefaced with `default`. Note that once the component has rendered changing these props (or `tokenOrCallback`) will not have any effect on the component.
 
-a callback url that returns a JWT. More info [in Apple's docs](https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init).
+If you want to programmatically change the rotation or viewport of the map after rendering this component can work with a function as children. For example, the following code will let you update the rotation of the map:
 
-#### `token`: string
+```js
+<MapKit
+  tokenOrCallback={devToken}
+>
+  {({ setRotation }) => {
+    setRotation(<pass in a number here to set rotation>)
+  }}
+</MapKit>
+```
 
-a JWT token to use. Use this when using a long-lived token. In this case its probably best to make sure you set an `origin` in your token.
+There is an example of this in the projects storybook.
