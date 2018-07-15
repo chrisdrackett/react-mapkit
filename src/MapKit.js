@@ -81,7 +81,7 @@ type State = {
 export const MapKitContext = React.createContext()
 
 export default class MapKit extends React.Component<Props, State> {
-  mapRef: ?React.Ref<'div'>
+  mapRef: { current: null | HTMLDivElement }
   map: Map
 
   static defaultProps = {
