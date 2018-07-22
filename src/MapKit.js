@@ -137,7 +137,7 @@ export default class MapKit extends React.Component<Props, State> {
     })
 
     // Create the 🗺️!
-    this.map = new mapkit.Map(this.mapRef.current)
+    if (this.mapRef.current) this.map = new mapkit.Map(this.mapRef.current)
 
     // Setup Default Map Options
     // in theory this should be possible to set via the above via:

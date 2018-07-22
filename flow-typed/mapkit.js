@@ -115,11 +115,13 @@ declare module 'mapkit' {
     accessibilityLabel?: string,
   }
 
-  declare export type ImageAnnotationConstructorOptions = AnnotationConstructorOptions & {
+  declare export type ImageAnnotationConstructorOptions = {
+    ...$Exact<AnnotationConstructorOptions>,
     url: ImageUrl,
   }
 
-  declare export type MarkerAnnotationConstructorOptions = AnnotationConstructorOptions & {
+  declare export type MarkerAnnotationConstructorOptions = {
+    ...$Exact<AnnotationConstructorOptions>,
     color?: string,
     glyphColor?: string,
     glyphImage?: ImageUrl,
@@ -207,6 +209,8 @@ declare module 'mapkit' {
   }
 
   declare export class Annotation {
+    [key: string]: any;
+
     coordinate: Coordinate;
 
     data: {};

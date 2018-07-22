@@ -8,11 +8,13 @@ import type MapKitType, {
   FeatureVisibility,
 } from 'mapkit'
 
+// mapkit was loaded within `MapKit.js`
 declare var mapkit: MapKitType
 
 import { MapKitContext } from './index'
 
-type Props = MarkerAnnotationConstructorOptions & {
+type Props = {
+  ...$Exact<MarkerAnnotationConstructorOptions>,
   map: Map,
   latitude: number,
   longitude: number,
