@@ -1,6 +1,6 @@
 {
   "name": "react-mapkit",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "React wrapper for Apple's mapkit.js.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -52,7 +52,7 @@
     "husky": "0.14.x",
     "jsonwebtoken": "8.2.x",
     "lint-staged": "7.1.x",
-    "nwb": "0.22.x",
+    "nwb": "0.23.x",
     "prettier": "1.13.x",
     "prompt": "^1.0.0",
     "react": "16.4.x",
