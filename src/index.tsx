@@ -1,1 +1,1 @@
-export * from './MapKit'
+export * from './useMap'
