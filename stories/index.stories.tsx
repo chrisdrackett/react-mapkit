@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { storiesOf } from '@storybook/react'
+import { number } from '@storybook/addon-knobs'
 
 import { useMap } from '../'
 import devToken from '../devToken'
@@ -38,3 +39,17 @@ const Map = () => {
 }
 
 storiesOf('map access', module).add('colorScheme', () => <Map />)
+
+const MapWithKnobs = () => {
+  const { mapRef, setRotation } = useMap(devToken)
+
+  const rotation = number('rotation', 0)
+
+  React.useEffect(() => {
+    setRotation(rotation)
+  }, [rotation, setRotation])
+
+  return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
+}
+
+storiesOf('map setters', module).add('map setters', () => <MapWithKnobs />)
