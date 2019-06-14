@@ -12,7 +12,7 @@ import {
   createCoordinateSpan,
 } from './utils'
 
-type Options = {
+export type DefaultOptions = {
   visibleMapRect?: Rect
   region?: {
     latitude: number
@@ -31,13 +31,13 @@ export const useMap = (
   tokenOrCallback: string,
 
   // default options for setting up the map.
-  options: Options = {},
+  defaultOptions: DefaultOptions = {},
 ) => {
   const mapElement = React.useRef<HTMLDivElement>(null)
   const map = React.useRef<mapkit.Map>()
 
   const [token] = React.useState(tokenOrCallback)
-  const [defaultMapOptions] = React.useState(options)
+  const [defaultMapOptions] = React.useState(defaultOptions)
 
   // Initial Setup
   React.useEffect(() => {
