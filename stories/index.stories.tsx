@@ -2,6 +2,9 @@ import React from 'react'
 
 import { storiesOf } from '@storybook/react'
 
+import { useMap } from '../'
+import devToken from '../devToken'
+
 import { MapWithDefaults } from './MapWithDefaults'
 
 storiesOf('Defaults', module)
@@ -21,3 +24,17 @@ storiesOf('Defaults', module)
   ))
   .add('rotation', () => <MapWithDefaults rotation={90} />)
   .add('tint', () => <MapWithDefaults tintColor={'#00b64e'} />)
+
+const Map = () => {
+  const { map, mapkit, mapRef } = useMap(devToken)
+
+  React.useEffect(() => {
+    if (map && mapkit) {
+      map.colorScheme = mapkit.Map.ColorSchemes.Dark
+    }
+  }, [map, mapkit])
+
+  return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
+}
+
+storiesOf('map access', module).add('colorScheme', () => <Map />)

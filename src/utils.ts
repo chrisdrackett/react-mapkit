@@ -3,6 +3,12 @@
 export type NumberTuple = [number, number]
 export type Rect = [number, number, number, number]
 export type PaddingType = number | mapkit.Padding
+export type RegionType = {
+  latitude: number
+  longitude: number
+  latitudeSpan: number
+  longitudeSpan: number
+}
 
 export const createPadding = (padding: PaddingType) => {
   return new mapkit.Padding(
@@ -26,6 +32,13 @@ export const createCoordinateSpan = (
   longitudeDelta: number,
 ) => {
   return new mapkit.CoordinateSpan(latitudeDelta, longitudeDelta)
+}
+
+export const createCoordinateRegionFromValues = (region: RegionType) => {
+  return createCoordinateRegion(
+    createCoordinate(region.latitude, region.longitude),
+    createCoordinateSpan(region.latitudeSpan, region.longitudeSpan),
+  )
 }
 
 export const createCoordinateRegion = (

@@ -6,20 +6,15 @@ import load from 'little-loader'
 import {
   NumberTuple,
   Rect,
+  RegionType,
   createCoordinate,
   createMapRect,
-  createCoordinateRegion,
-  createCoordinateSpan,
+  createCoordinateRegionFromValues,
 } from './utils'
 
 export type DefaultOptions = {
   visibleMapRect?: Rect
-  region?: {
-    latitude: number
-    longitude: number
-    latitudeSpan: number
-    longitudeSpan: number
-  }
+  region?: RegionType
   center?: NumberTuple
   rotation?: number
   tintColor?: string
@@ -34,16 +29,19 @@ export const useMap = (
   defaultOptions: DefaultOptions = {},
 ) => {
   const mapElement = React.useRef<HTMLDivElement>(null)
-  const map = React.useRef<mapkit.Map>()
 
   const [token] = React.useState(tokenOrCallback)
   const [defaultMapOptions] = React.useState(defaultOptions)
+  const [map, setMap] = React.useState<mapkit.Map>()
+  const [mapKit, setMapKit] = React.useState<typeof mapkit>()
 
   // Initial Setup
   React.useEffect(() => {
     if (mapElement.current) {
       load('https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js', () => {
         const isCallback = token.includes('/')
+
+        setMapKit(mapkit)
 
         // init mapkit
         mapkit.init({
@@ -60,28 +58,20 @@ export const useMap = (
 
         // Create the 🗺️ using the default options
         if (mapElement.current) {
-          map.current = new mapkit.Map(mapElement.current, {
+          const newMap = new mapkit.Map(mapElement.current, {
             visibleMapRect:
               defaultMapOptions.visibleMapRect &&
               createMapRect(...defaultMapOptions.visibleMapRect),
             region:
               defaultMapOptions.region &&
-              createCoordinateRegion(
-                createCoordinate(
-                  defaultMapOptions.region.latitude,
-                  defaultMapOptions.region.longitude,
-                ),
-                createCoordinateSpan(
-                  defaultMapOptions.region.latitudeSpan,
-                  defaultMapOptions.region.longitudeSpan,
-                ),
-              ),
+              createCoordinateRegionFromValues(defaultMapOptions.region),
             center:
               defaultMapOptions.center &&
               createCoordinate(...defaultMapOptions.center),
             rotation: defaultMapOptions.rotation,
             tintColor: defaultMapOptions.tintColor,
           })
+          setMap(newMap)
         }
       })
     }
@@ -89,15 +79,30 @@ export const useMap = (
 
   return {
     mapRef: mapElement,
+    map: map,
+    mapkit: mapKit,
     setRotation: (rotationValue: number, isAnimated: boolean = false) => {
-      if (map.current) {
-        map.current.setRotationAnimated(rotationValue, isAnimated)
+      if (map) {
+        map.setRotationAnimated(rotationValue, isAnimated)
       }
     },
     setCenter: (centerValue: NumberTuple, isAnimated: boolean = false) => {
-      if (map.current) {
-        map.current.setCenterAnimated(
-          createCoordinate(...centerValue),
+      if (map) {
+        map.setCenterAnimated(createCoordinate(...centerValue), isAnimated)
+      }
+    },
+    setRegion: (region: RegionType, isAnimated: boolean = false) => {
+      if (map) {
+        map.setRegionAnimated(
+          createCoordinateRegionFromValues(region),
+          isAnimated,
+        )
+      }
+    },
+    setVisibleMapRect: (visibleMapRect: Rect, isAnimated: boolean = false) => {
+      if (map) {
+        map.setVisibleMapRectAnimated(
+          createMapRect(...visibleMapRect),
           isAnimated,
         )
       }
