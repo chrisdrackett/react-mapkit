@@ -30,18 +30,22 @@ export const useMap = (
 ) => {
   const mapElement = React.useRef<HTMLDivElement>(null)
 
+  const mapRef = React.useRef<mapkit.Map>()
+
   const [token] = React.useState(tokenOrCallback)
   const [defaultMapOptions] = React.useState(defaultOptions)
+
   const [map, setMap] = React.useState<mapkit.Map>()
   const [mapKit, setMapKit] = React.useState<typeof mapkit>()
 
   // Initial Setup
   React.useEffect(() => {
-    if (mapElement.current) {
+    // we only want to setup once after we have the mapElement ref
+    if (!mapKit && mapElement.current) {
       load('https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js', () => {
-        const isCallback = token.includes('/')
-
         setMapKit(mapkit)
+
+        const isCallback = token.includes('/')
 
         // init mapkit
         mapkit.init({
@@ -71,11 +75,19 @@ export const useMap = (
             rotation: defaultMapOptions.rotation,
             tintColor: defaultMapOptions.tintColor,
           })
+          mapRef.current = newMap
           setMap(newMap)
         }
       })
     }
-  }, [defaultMapOptions, mapElement, token])
+  }, [defaultMapOptions, mapElement, mapKit, token])
+
+  // Clean up the map on unmount
+  React.useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.destroy()
+    }
+  }, [])
 
   return {
     mapRef: mapElement,
