@@ -93,31 +93,43 @@ export const useMap = (
     mapRef: mapElement,
     map: map,
     mapkit: mapKit,
-    setRotation: (rotationValue: number, isAnimated: boolean = false) => {
-      if (map) {
-        map.setRotationAnimated(rotationValue, isAnimated)
-      }
-    },
-    setCenter: (centerValue: NumberTuple, isAnimated: boolean = false) => {
-      if (map) {
-        map.setCenterAnimated(createCoordinate(...centerValue), isAnimated)
-      }
-    },
-    setRegion: (region: RegionType, isAnimated: boolean = false) => {
-      if (map) {
-        map.setRegionAnimated(
-          createCoordinateRegionFromValues(region),
-          isAnimated,
-        )
-      }
-    },
-    setVisibleMapRect: (visibleMapRect: Rect, isAnimated: boolean = false) => {
-      if (map) {
-        map.setVisibleMapRectAnimated(
-          createMapRect(...visibleMapRect),
-          isAnimated,
-        )
-      }
-    },
+    setRotation: React.useCallback(
+      (rotationValue: number, isAnimated: boolean = false) => {
+        if (map) {
+          map.setRotationAnimated(rotationValue, isAnimated)
+        }
+      },
+      [map],
+    ),
+    setCenter: React.useCallback(
+      (centerValue: NumberTuple, isAnimated: boolean = false) => {
+        if (map) {
+          map.setCenterAnimated(createCoordinate(...centerValue), isAnimated)
+        }
+      },
+      [map],
+    ),
+    setRegion: React.useCallback(
+      (region: RegionType, isAnimated: boolean = false) => {
+        if (map) {
+          map.setRegionAnimated(
+            createCoordinateRegionFromValues(region),
+            isAnimated,
+          )
+        }
+      },
+      [map],
+    ),
+    setVisibleMapRect: React.useCallback(
+      (visibleMapRect: Rect, isAnimated: boolean = false) => {
+        if (map) {
+          map.setVisibleMapRectAnimated(
+            createMapRect(...visibleMapRect),
+            isAnimated,
+          )
+        }
+      },
+      [map],
+    ),
   }
 }
