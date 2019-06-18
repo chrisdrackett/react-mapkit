@@ -2,10 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import devToken from '../devToken'
-import { useMap } from '../.'
+import { useMap, Marker } from '../.'
 
 const App = () => {
-  const { mapRef, setRotation } = useMap(devToken, {
+  const { MapComponent, setRotation } = useMap(devToken, {
     region: {
       latitude: 37,
       longitude: -122,
@@ -13,10 +13,13 @@ const App = () => {
       longitudeSpan: 0.12,
     },
   })
+
   return (
     <div>
       <button onClick={() => setRotation(Math.random() * 360)}>rotate!</button>
-      <div ref={mapRef} />
+      <MapComponent>
+        <Marker />
+      </MapComponent>
     </div>
   )
 }
