@@ -9,6 +9,23 @@ export type RegionType = {
   latitudeSpan: number
   longitudeSpan: number
 }
+export type ImageUrl = {
+  '1': string
+  '2'?: string
+  '3'?: string
+}
+
+type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N
+type ConstructorParameters<T> = T extends new (...args: infer U) => any
+  ? U
+  : never
+
+type MapConstructionOptions = NonNullable<
+  ConstructorParameters<typeof mapkit.Map>[1]
+>
+export type MarkerConstructionOptions = NonNullable<
+  ConstructorParameters<typeof mapkit.MarkerAnnotation>[1]
+>
 
 export const createPadding = (padding: PaddingType) => {
   return new mapkit.Padding(
@@ -61,10 +78,11 @@ export const createMapRect = (
   return new mapkit.MapRect(x, y, width, height)
 }
 
-export type DefaultMapOptions = {
-  visibleMapRect?: Rect
-  region?: RegionType
-  center?: NumberTuple
-  rotation?: number
-  tintColor?: string
-}
+export type DefaultMapOptions = Merge<
+  MapConstructionOptions,
+  {
+    visibleMapRect?: Rect
+    region?: RegionType
+    center?: NumberTuple
+  }
+>

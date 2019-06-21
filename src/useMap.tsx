@@ -13,7 +13,9 @@ import {
 } from './utils'
 
 export const useMap = (defaultOptions: DefaultMapOptions = {}) => {
-  const [defaultMapOptions] = React.useState(defaultOptions)
+  const [
+    { visibleMapRect, region, center, ...defaultMapOptions },
+  ] = React.useState(defaultOptions)
   let { mapkit } = React.useContext(MapkitContext)
   let mapRef = React.useRef<HTMLDivElement>(null)
   let [map, setMap] = React.useState<mapkit.Map>()
@@ -21,17 +23,10 @@ export const useMap = (defaultOptions: DefaultMapOptions = {}) => {
   React.useEffect(() => {
     if (mapkit && mapRef.current) {
       const newMap = new mapkit.Map(mapRef.current, {
-        visibleMapRect:
-          defaultMapOptions.visibleMapRect &&
-          createMapRect(...defaultMapOptions.visibleMapRect),
-        region:
-          defaultMapOptions.region &&
-          createCoordinateRegionFromValues(defaultMapOptions.region),
-        center:
-          defaultMapOptions.center &&
-          createCoordinate(...defaultMapOptions.center),
-        rotation: defaultMapOptions.rotation,
-        tintColor: defaultMapOptions.tintColor,
+        visibleMapRect: visibleMapRect && createMapRect(...visibleMapRect),
+        region: region && createCoordinateRegionFromValues(region),
+        center: center && createCoordinate(...center),
+        ...defaultMapOptions,
       })
       setMap(newMap)
     }
