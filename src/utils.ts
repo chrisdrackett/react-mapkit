@@ -60,3 +60,11 @@ export const createMapRect = (
 ) => {
   return new mapkit.MapRect(x, y, width, height)
 }
+
+export type DefaultMapOptions = {
+  visibleMapRect?: Rect
+  region?: RegionType
+  center?: NumberTuple
+  rotation?: number
+  tintColor?: string
+}

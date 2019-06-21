@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { MapkitContext } from './MapkitProvider'
+import { DefaultMapOptions } from './utils'
 
 import {
   NumberTuple,
@@ -11,14 +12,27 @@ import {
   createCoordinateRegionFromValues,
 } from './utils'
 
-export const useMap = () => {
+export const useMap = (defaultOptions: DefaultMapOptions = {}) => {
+  const [defaultMapOptions] = React.useState(defaultOptions)
   let { mapkit } = React.useContext(MapkitContext)
   let mapRef = React.useRef<HTMLDivElement>(null)
   let [map, setMap] = React.useState<mapkit.Map>()
 
   React.useEffect(() => {
     if (mapkit && mapRef.current) {
-      const newMap = new mapkit.Map(mapRef.current)
+      const newMap = new mapkit.Map(mapRef.current, {
+        visibleMapRect:
+          defaultMapOptions.visibleMapRect &&
+          createMapRect(...defaultMapOptions.visibleMapRect),
+        region:
+          defaultMapOptions.region &&
+          createCoordinateRegionFromValues(defaultMapOptions.region),
+        center:
+          defaultMapOptions.center &&
+          createCoordinate(...defaultMapOptions.center),
+        rotation: defaultMapOptions.rotation,
+        tintColor: defaultMapOptions.tintColor,
+      })
       setMap(newMap)
     }
   }, [mapRef, mapkit])
@@ -30,7 +44,7 @@ export const useMap = () => {
         map.destroy()
       }
     }
-  }, [map])
+  }, [])
 
   return {
     mapkit,

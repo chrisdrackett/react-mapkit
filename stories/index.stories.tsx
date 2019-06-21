@@ -40,3 +40,24 @@ storiesOf('Use', module)
       </MapkitProvider>
     </>
   ))
+
+storiesOf('Defaults', module)
+  .add('center', () => (
+    <Map tokenOrCallback={devToken} center={[37.415, -122.048333]} />
+  ))
+  .add('visibleMapRect', () => (
+    <Map tokenOrCallback={devToken} visibleMapRect={[0.5, 0.2, 0.3, 0.4]} />
+  ))
+  .add('region', () => (
+    <Map
+      tokenOrCallback={devToken}
+      region={{
+        latitude: 37.415,
+        longitude: -122.048333,
+        latitudeSpan: 0.016,
+        longitudeSpan: 0.016,
+      }}
+    />
+  ))
+  .add('rotation', () => <Map tokenOrCallback={devToken} rotation={90} />)
+  .add('tint', () => <Map tokenOrCallback={devToken} tintColor={'#00b64e'} />)

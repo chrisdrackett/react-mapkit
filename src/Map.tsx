@@ -2,16 +2,13 @@ import React from 'react'
 
 import { MapkitContext, MapkitProvider } from './MapkitProvider'
 import { useMap } from './useMap'
+import { DefaultMapOptions } from './utils'
 
-type MapProps = {
-  // ⚠️ Pick between callbackUrl or token.
-  // https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init
-  // not needed if within a `MapProvider`
-  tokenOrCallback?: string
-}
-
-export const MapBox: React.FC = ({ children }) => {
-  const { mapRef } = useMap()
+export const MapBox: React.FC<DefaultMapOptions> = ({
+  children,
+  ...defaultOptions
+}) => {
+  const { mapRef } = useMap(defaultOptions)
 
   return (
     <div
@@ -22,7 +19,14 @@ export const MapBox: React.FC = ({ children }) => {
   )
 }
 
-export const Map: React.FC<MapProps> = ({ tokenOrCallback, ...props }) => {
+export const Map: React.FC<
+  {
+    // ⚠️ Pick between callbackUrl or token.
+    // https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init
+    // not needed if within a `MapProvider`
+    tokenOrCallback?: string
+  } & DefaultMapOptions
+> = ({ tokenOrCallback, ...props }) => {
   let context = React.useContext(MapkitContext)
 
   if (context.isInProvider) {
