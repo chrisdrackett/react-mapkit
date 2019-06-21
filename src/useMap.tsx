@@ -30,6 +30,10 @@ export const MapkitContext = React.createContext<ContextType>({
   mapkit: undefined,
 })
 
+const MapBox: React.FC<{ ref: React.Ref<HTMLDivElement> }> = ({ ref }) => (
+  <div ref={ref} style={{ width: '100%', height: '100%' }} />
+)
+
 export const useMap = (
   // ⚠️ Pick between callbackUrl or token.
   // https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init
@@ -83,61 +87,56 @@ export const useMap = (
     }
   }, [context, token])
 
-  const mapRef = React.useCallback(
-    (node: HTMLDivElement) => {
-      if (mapkitLoaded && node !== null) {
-        // Create the 🗺️ using the default options
-        const map = new mapkit.Map(node, {
-          visibleMapRect:
-            defaultMapOptions.visibleMapRect &&
-            createMapRect(...defaultMapOptions.visibleMapRect),
-          region:
-            defaultMapOptions.region &&
-            createCoordinateRegionFromValues(defaultMapOptions.region),
-          center:
-            defaultMapOptions.center &&
-            createCoordinate(...defaultMapOptions.center),
-          rotation: defaultMapOptions.rotation,
-          tintColor: defaultMapOptions.tintColor,
-        })
+  const mapTestRef = React.useRef<HTMLDivElement>(null)
 
-        setContext({
-          map,
-          mapkit,
-        })
+  React.useEffect(() => {
+    if (mapkitLoaded && mapTestRef.current) {
+      // Create the 🗺️ using the default options
+      const map = new mapkit.Map(mapTestRef.current, {
+        visibleMapRect:
+          defaultMapOptions.visibleMapRect &&
+          createMapRect(...defaultMapOptions.visibleMapRect),
+        region:
+          defaultMapOptions.region &&
+          createCoordinateRegionFromValues(defaultMapOptions.region),
+        center:
+          defaultMapOptions.center &&
+          createCoordinate(...defaultMapOptions.center),
+        rotation: defaultMapOptions.rotation,
+        tintColor: defaultMapOptions.tintColor,
+      })
 
-        setMapLoaded(true)
-      }
-    },
-    [
-      defaultMapOptions.center,
-      defaultMapOptions.region,
-      defaultMapOptions.rotation,
-      defaultMapOptions.tintColor,
-      defaultMapOptions.visibleMapRect,
-      mapkitLoaded,
-    ],
-  )
+      setContext({
+        map,
+        mapkit,
+      })
+
+      setMapLoaded(true)
+    }
+  }, [
+    defaultMapOptions.center,
+    defaultMapOptions.region,
+    defaultMapOptions.rotation,
+    defaultMapOptions.tintColor,
+    defaultMapOptions.visibleMapRect,
+    mapkitLoaded,
+  ])
 
   const MapComponent: React.FC = React.useCallback(
     ({ children }) => {
-      if (mapkitLoaded) {
-        return (
-          <>
-            <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
-            {mapLoaded && (
-              <MapkitContext.Provider
-                value={context as ContextType}
-                children={children}
-              />
-            )}
-          </>
-        )
-      }
-
-      return null
+      return (
+        <>
+          <MapBox ref={mapTestRef} />
+          {mapkitLoaded && mapLoaded && (
+            <MapkitContext.Provider
+              value={context as ContextType}
+              children={children}
+            />
+          )}
+        </>
+      )
     },
-    [mapkitLoaded, mapRef, mapLoaded, context],
+    [context, mapLoaded, mapkitLoaded],
   )
 
   return {
