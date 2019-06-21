@@ -28,7 +28,7 @@
     ]
   },
   "dependencies": {
-    "react-script-hook": "^1.0.5"
+    "little-loader": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

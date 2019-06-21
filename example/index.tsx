@@ -6,14 +6,11 @@ import { MapkitProvider, Map, Marker } from '../src'
 
 const App = () => {
   return (
-    <>
-      <Map />
-      <MapkitProvider tokenOrCallback={devToken}>
-        <Map>
-          <Marker />
-        </Map>
-      </MapkitProvider>
-    </>
+    <MapkitProvider tokenOrCallback={devToken}>
+      <Map>
+        <Marker />
+      </Map>
+    </MapkitProvider>
   )
 }
 

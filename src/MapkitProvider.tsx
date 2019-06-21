@@ -1,7 +1,7 @@
 /* global mapkit */
 
 import React from 'react'
-import useScript from 'react-script-hook'
+import load from 'little-loader'
 
 type MapkitContextType = {
   isInProvider: boolean
@@ -25,10 +25,6 @@ export const MapkitProvider: React.FC<ProviderProps> = ({
 }) => {
   const existingContext = React.useContext(MapkitContext)
 
-  const [scriptLoading] = useScript({
-    src: 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js',
-  })
-
   const [context, setContext] = React.useState<MapkitContextType>({
     mapkit: existingContext.mapkit,
     isInProvider: true,
@@ -36,9 +32,10 @@ export const MapkitProvider: React.FC<ProviderProps> = ({
 
   React.useEffect(() => {
     if (!existingContext.isInProvider) {
-      if (!scriptLoading) {
+      load('https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js', () => {
         const isCallback = tokenOrCallback.includes('/')
 
+        // init mapkit
         mapkit.init({
           authorizationCallback: (done) => {
             if (isCallback) {
@@ -50,11 +47,10 @@ export const MapkitProvider: React.FC<ProviderProps> = ({
             }
           },
         })
-
         setContext({ mapkit, isInProvider: true })
-      }
+      })
     }
-  }, [existingContext.isInProvider, scriptLoading, tokenOrCallback])
+  }, [existingContext.isInProvider, tokenOrCallback])
 
   return <MapkitContext.Provider value={context} children={children} />
 }

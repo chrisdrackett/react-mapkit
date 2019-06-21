@@ -1,7 +1,6 @@
-/* global mapkit */
-
 import React from 'react'
-import load from 'little-loader'
+
+import { MapkitContext } from './MapkitProvider'
 
 import {
   NumberTuple,
@@ -12,177 +11,68 @@ import {
   createCoordinateRegionFromValues,
 } from './utils'
 
-export type DefaultOptions = {
-  visibleMapRect?: Rect
-  region?: RegionType
-  center?: NumberTuple
-  rotation?: number
-  tintColor?: string
-}
+export const useMap = () => {
+  let { mapkit } = React.useContext(MapkitContext)
+  let mapRef = React.useRef<HTMLDivElement>(null)
+  let [map, setMap] = React.useState<mapkit.Map>()
 
-type ContextType = {
-  map?: mapkit.Map
-  mapkit?: typeof mapkit
-}
-
-export const MapkitContext = React.createContext<ContextType>({
-  map: undefined,
-  mapkit: undefined,
-})
-
-const MapBox: React.FC<{ ref: React.Ref<HTMLDivElement> }> = ({ ref }) => (
-  <div ref={ref} style={{ width: '100%', height: '100%' }} />
-)
-
-export const useMap = (
-  // ⚠️ Pick between callbackUrl or token.
-  // https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init
-  tokenOrCallback: string,
-
-  // default options for setting up the map.
-  defaultOptions: DefaultOptions = {},
-) => {
-  const [token] = React.useState(tokenOrCallback)
-  const [defaultMapOptions] = React.useState(defaultOptions)
-
-  const [mapkitLoaded, setMapkitLoaded] = React.useState(false)
-  const [mapLoaded, setMapLoaded] = React.useState(false)
-
-  const [context, setContext] = React.useState<ContextType>()
-
-  // Initial Setup
-  // Load the mapkit script from apple
   React.useEffect(() => {
-    try {
-      // check to see if mapkit has been loaded
-      mapkit.build
-      setMapkitLoaded(true)
-    } catch (err) {
-      // mapkit has not loaded yet
-      load('https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js', () => {
-        const isCallback = token.includes('/')
-
-        // init mapkit
-        mapkit.init({
-          authorizationCallback: (done) => {
-            if (isCallback) {
-              fetch(token)
-                .then((res) => res.text())
-                .then(done)
-            } else {
-              done(token)
-            }
-          },
-        })
-
-        setMapkitLoaded(true)
-      })
+    if (mapkit && mapRef.current) {
+      const newMap = new mapkit.Map(mapRef.current)
+      setMap(newMap)
     }
+  }, [mapRef, mapkit])
 
-    // Clean up the map on unmount
+  // Clean up the map on unmount
+  React.useEffect(() => {
     return () => {
-      if (context && context.map) {
-        context.map.destroy()
+      if (map) {
+        map.destroy()
       }
     }
-  }, [context, token])
-
-  const mapTestRef = React.useRef<HTMLDivElement>(null)
-
-  React.useEffect(() => {
-    if (mapkitLoaded && mapTestRef.current) {
-      // Create the 🗺️ using the default options
-      const map = new mapkit.Map(mapTestRef.current, {
-        visibleMapRect:
-          defaultMapOptions.visibleMapRect &&
-          createMapRect(...defaultMapOptions.visibleMapRect),
-        region:
-          defaultMapOptions.region &&
-          createCoordinateRegionFromValues(defaultMapOptions.region),
-        center:
-          defaultMapOptions.center &&
-          createCoordinate(...defaultMapOptions.center),
-        rotation: defaultMapOptions.rotation,
-        tintColor: defaultMapOptions.tintColor,
-      })
-
-      setContext({
-        map,
-        mapkit,
-      })
-
-      setMapLoaded(true)
-    }
-  }, [
-    defaultMapOptions.center,
-    defaultMapOptions.region,
-    defaultMapOptions.rotation,
-    defaultMapOptions.tintColor,
-    defaultMapOptions.visibleMapRect,
-    mapkitLoaded,
-  ])
-
-  const MapComponent: React.FC = React.useCallback(
-    ({ children }) => {
-      return (
-        <>
-          <MapBox ref={mapTestRef} />
-          {mapkitLoaded && mapLoaded && (
-            <MapkitContext.Provider
-              value={context as ContextType}
-              children={children}
-            />
-          )}
-        </>
-      )
-    },
-    [context, mapLoaded, mapkitLoaded],
-  )
+  }, [map])
 
   return {
-    map: context && context.map,
-    mapkit: context && context.mapkit,
-    MapComponent,
+    mapkit,
+    map,
+    mapRef,
     setRotation: React.useCallback(
       (rotationValue: number, isAnimated: boolean = false) => {
-        if (context && context.map) {
-          context.map.setRotationAnimated(rotationValue, isAnimated)
+        if (map) {
+          map.setRotationAnimated(rotationValue, isAnimated)
         }
       },
-      [context],
+      [map],
     ),
     setCenter: React.useCallback(
       (centerValue: NumberTuple, isAnimated: boolean = false) => {
-        if (context && context.map) {
-          context.map.setCenterAnimated(
-            createCoordinate(...centerValue),
-            isAnimated,
-          )
+        if (map) {
+          map.setCenterAnimated(createCoordinate(...centerValue), isAnimated)
         }
       },
-      [context],
+      [map],
     ),
     setRegion: React.useCallback(
       (region: RegionType, isAnimated: boolean = false) => {
-        if (context && context.map) {
-          context.map.setRegionAnimated(
+        if (map) {
+          map.setRegionAnimated(
             createCoordinateRegionFromValues(region),
             isAnimated,
           )
         }
       },
-      [context],
+      [map],
     ),
     setVisibleMapRect: React.useCallback(
       (visibleMapRect: Rect, isAnimated: boolean = false) => {
-        if (context && context.map) {
-          context.map.setVisibleMapRectAnimated(
+        if (map) {
+          map.setVisibleMapRectAnimated(
             createMapRect(...visibleMapRect),
             isAnimated,
           )
         }
       },
-      [context],
+      [map],
     ),
   }
 }
