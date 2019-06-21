@@ -1,55 +1,42 @@
 import React from 'react'
 
 import { storiesOf } from '@storybook/react'
-import { number } from '@storybook/addon-knobs'
 
-import { useMap } from '../'
+import { Map, MapkitProvider, useMap } from '../src'
 import devToken from '../devToken'
 
-import { MapWithDefaults } from './MapWithDefaults'
+const UseMapExample = () => {
+  const { setRotation, mapRef } = useMap()
 
-storiesOf('Defaults', module)
-  .add('center', () => <MapWithDefaults center={[37.415, -122.048333]} />)
-  .add('visibleMapRect', () => (
-    <MapWithDefaults visibleMapRect={[0.5, 0.2, 0.3, 0.4]} />
-  ))
-  .add('region', () => (
-    <MapWithDefaults
-      region={{
-        latitude: 37.415,
-        longitude: -122.048333,
-        latitudeSpan: 0.016,
-        longitudeSpan: 0.016,
-      }}
-    />
-  ))
-  .add('rotation', () => <MapWithDefaults rotation={90} />)
-  .add('tint', () => <MapWithDefaults tintColor={'#00b64e'} />)
-
-const Map = () => {
-  const { map, mapkit, mapRef } = useMap(devToken)
-
-  React.useEffect(() => {
-    if (map && mapkit) {
-      map.colorScheme = mapkit.Map.ColorSchemes.Dark
-    }
-  }, [map, mapkit])
-
-  return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
+  return (
+    <>
+      <button onClick={() => setRotation(Math.random() * 360)}>rotate!</button>
+      <div ref={mapRef} style={{ width: '100%', height: '80%' }} />
+    </>
+  )
 }
 
-storiesOf('map access', module).add('colorScheme', () => <Map />)
-
-const MapWithKnobs = () => {
-  const { mapRef, setRotation } = useMap(devToken)
-
-  const rotation = number('rotation', 0)
-
-  React.useEffect(() => {
-    setRotation(rotation)
-  }, [rotation, setRotation])
-
-  return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
-}
-
-storiesOf('map setters', module).add('map setters', () => <MapWithKnobs />)
+storiesOf('Use', module)
+  .add('with a provider', () => (
+    <MapkitProvider tokenOrCallback={devToken}>
+      <Map />
+    </MapkitProvider>
+  ))
+  .add('just a Map', () => <Map tokenOrCallback={devToken} />)
+  .add('using a ref', () => {
+    return (
+      <MapkitProvider tokenOrCallback={devToken}>
+        <UseMapExample />
+      </MapkitProvider>
+    )
+  })
+  .add('multiple providers', () => (
+    <>
+      <MapkitProvider tokenOrCallback={devToken}>
+        <Map />
+      </MapkitProvider>
+      <MapkitProvider tokenOrCallback={devToken}>
+        <Map />
+      </MapkitProvider>
+    </>
+  ))
