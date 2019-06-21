@@ -1,8 +1,22 @@
 /* global mapkit */
 
+// Typescript Helpers
+type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N
+type ConstructorParameters<T> = T extends new (...args: infer U) => any
+  ? U
+  : never
+
+type MapConstructionOptions = NonNullable<
+  ConstructorParameters<typeof mapkit.Map>[1]
+>
+
+type PaddingConstructorOptions = NonNullable<
+  ConstructorParameters<typeof mapkit.Padding>[0]
+>
+
 export type NumberTuple = [number, number]
 export type Rect = [number, number, number, number]
-export type PaddingType = number | mapkit.Padding
+export type PaddingType = number | PaddingConstructorOptions
 export type RegionType = {
   latitude: number
   longitude: number
@@ -15,17 +29,7 @@ export type ImageUrl = {
   '3'?: string
 }
 
-type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N
-type ConstructorParameters<T> = T extends new (...args: infer U) => any
-  ? U
-  : never
-
-type MapConstructionOptions = NonNullable<
-  ConstructorParameters<typeof mapkit.Map>[1]
->
-export type MarkerConstructionOptions = NonNullable<
-  ConstructorParameters<typeof mapkit.MarkerAnnotation>[1]
->
+// Mapkit helpers
 
 export const createPadding = (padding: PaddingType) => {
   return new mapkit.Padding(
@@ -78,11 +82,36 @@ export const createMapRect = (
   return new mapkit.MapRect(x, y, width, height)
 }
 
+// 🗺️ Map construction
+
+// these are the props we expose to users.
 export type DefaultMapOptions = Merge<
   MapConstructionOptions,
   {
     visibleMapRect?: Rect
     region?: RegionType
     center?: NumberTuple
+    padding?: PaddingType
   }
+>
+
+// this function takes simple props and turns them into the mapkit options that mapkit expects
+export const propsToMapConstructionOptions = ({
+  visibleMapRect,
+  region,
+  center,
+  padding,
+  ...options
+}: DefaultMapOptions) => {
+  return {
+    visibleMapRect: visibleMapRect && createMapRect(...visibleMapRect),
+    region: region && createCoordinateRegionFromValues(region),
+    center: center && createCoordinate(...center),
+    padding: padding ? createPadding(padding) : undefined,
+    ...options,
+  }
+}
+
+export type MarkerConstructionOptions = NonNullable<
+  ConstructorParameters<typeof mapkit.MarkerAnnotation>[1]
 >
