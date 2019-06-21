@@ -12,3 +12,5 @@ dist
 /devToken.js
 
 /yarn-error.log
+/storybook-static
+/.rts2_cache_esm
