@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { MapkitContext, MapkitProvider } from './MapkitProvider'
-import { useMap } from './useMap2'
+import { useMap } from './useMap'
 
 type MapProps = {
   // ⚠️ Pick between callbackUrl or token.

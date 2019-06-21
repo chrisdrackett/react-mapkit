@@ -9580,11 +9580,6 @@ react-resize-detector@^4.0.5:
     raf-schd "^4.0.0"
     resize-observer-polyfill "^1.5.1"
 
-react-script-hook@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/react-script-hook/-/react-script-hook-1.0.5.tgz#8d36a161beca7b0f1b58218be4d9f1135b612d9d"
-  integrity sha512-cX1z7Ap7ZnmHLsyJ3mKWEI/K9oF+yO8qUcP7iRNTPWQnuVFjMY8OtYICQrXmiwjFnhlha4Dhg2y1UYgNhe7F7A==
-
 react-select@^2.2.0:
   version "2.4.4"
   resolved "https://registry.yarnpkg.com/react-select/-/react-select-2.4.4.tgz#ba72468ef1060c7d46fbb862b0748f96491f1f73"
