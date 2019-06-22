@@ -1,23 +1,36 @@
 import React from 'react'
 
-// import { MapkitContext } from './useMap'
+import { MapContext } from './Map'
 
-import { ImageUrl } from './utils'
+import {
+  MarkerOptions,
+  createCoordinate,
+  propsToMarkerConstructionOptions,
+} from './utils'
 
 type MarkerProps = {
   latitude: number
   longitude: number
-  color?: string
-  glyphColor?: string
-  glyphImage?: ImageUrl
-  glyphText?: string
-  selectedGlyphImage?: ImageUrl
-  subtitleVisibility?: string
-  titleVisibility?: string
-}
+} & MarkerOptions
 
-export const Marker: React.FC<MarkerProps> = () => {
-  // const context = React.useContext(MapkitContext)
+export const Marker: React.FC<MarkerProps> = ({
+  latitude,
+  longitude,
+  ...options
+}) => {
+  const { mapkit, map } = React.useContext(MapContext)
+  const marker = React.useRef<mapkit.MarkerAnnotation>()
 
-  return <div>Marker!</div>
+  React.useEffect(() => {
+    if (mapkit && map) {
+      marker.current = new mapkit.MarkerAnnotation(
+        createCoordinate(latitude, longitude),
+        propsToMarkerConstructionOptions(options),
+      )
+
+      map.addAnnotation(marker.current)
+    }
+  }, [mapkit, map])
+
+  return null
 }

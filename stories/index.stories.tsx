@@ -2,16 +2,16 @@ import React from 'react'
 
 import { storiesOf } from '@storybook/react'
 
-import { Map, MapkitProvider, useMap } from '../src'
+import { Map, MapkitProvider, useMap, Marker } from '../src'
 import devToken from '../devToken'
 
 const UseMapExample = () => {
-  const { setRotation, mapRef } = useMap()
+  const { setRotation, mapProps } = useMap()
 
   return (
     <>
       <button onClick={() => setRotation(Math.random() * 360)}>rotate!</button>
-      <div ref={mapRef} style={{ width: '100%', height: '80%' }} />
+      <Map {...mapProps} />
     </>
   )
 }
@@ -62,3 +62,23 @@ storiesOf('Defaults', module)
   .add('rotation', () => <Map tokenOrCallback={devToken} rotation={90} />)
   .add('tint', () => <Map tokenOrCallback={devToken} tintColor={'#00b64e'} />)
   .add('padding', () => <Map tokenOrCallback={devToken} padding={20} />)
+
+storiesOf('Markers', module).add('adding a marker', () => (
+  <Map
+    tokenOrCallback={devToken}
+    region={{
+      latitude: 47.6754,
+      longitude: -122.2084,
+      latitudeSpan: 0.006,
+      longitudeSpan: 0.006,
+    }}
+  >
+    <Marker latitude={47.6754} longitude={-122.2084} />
+    <Marker
+      latitude={47.6764}
+      longitude={-122.2073}
+      title={'Tea here!'}
+      subtitle={'coffee too ☕'}
+    />
+  </Map>
+))

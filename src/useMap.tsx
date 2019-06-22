@@ -40,7 +40,11 @@ export const useMap = (defaultOptions: MapOptions = {}) => {
   return {
     mapkit,
     map,
-    mapRef,
+    mapProps: {
+      mapkit,
+      map,
+      mapRef,
+    },
     setRotation: React.useCallback(
       (rotationValue: number, isAnimated: boolean = false) => {
         if (map) {

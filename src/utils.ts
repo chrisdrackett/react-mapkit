@@ -1,5 +1,7 @@
 /* global mapkit */
 
+import React from 'react'
+
 // Typescript Helpers
 type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N
 type ConstructorParameters<T> = T extends new (...args: infer U) => any
@@ -106,25 +108,30 @@ export const propsToMapConstructionOptions = ({
   center,
   padding,
   ...options
-}: MapOptions) => {
-  return {
-    visibleMapRect: visibleMapRect && createMapRect(...visibleMapRect),
-    region: region && createCoordinateRegionFromValues(region),
-    center: center && createCoordinate(...center),
-    padding: padding ? createPadding(padding) : undefined,
-    ...options,
-  }
-}
+}: MapOptions) => ({
+  visibleMapRect: visibleMapRect && createMapRect(...visibleMapRect),
+  region: region && createCoordinateRegionFromValues(region),
+  center: center && createCoordinate(...center),
+  padding: padding ? createPadding(padding) : createPadding(0),
+  ...options,
+})
 
 // 📌 Marker Options
 
 // these are the props we expose to users.
 export type MarkerOptions = Merge<
-  MapConstructionOptions,
+  MarkerConstructionOptions,
   {
-    visibleMapRect?: Rect
-    region?: RegionType
-    center?: NumberTuple
     padding?: PaddingType
   }
 >
+
+export const propsToMarkerConstructionOptions = ({
+  padding,
+  ...options
+}: MarkerOptions) => {
+  return {
+    padding: padding ? createPadding(padding) : createPadding(0),
+    ...options,
+  }
+}
