@@ -2,9 +2,9 @@ import React from 'react'
 
 import { MapkitContext, MapkitProvider } from './MapkitProvider'
 import { useMap } from './useMap'
-import { DefaultMapOptions } from './utils'
+import { MapOptions } from './utils'
 
-export const MapBox: React.FC<DefaultMapOptions> = ({
+export const MapBox: React.FC<MapOptions> = ({
   children,
   ...defaultOptions
 }) => {
@@ -25,7 +25,7 @@ export const Map: React.FC<
     // https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init
     // not needed if within a `MapProvider`
     tokenOrCallback?: string
-  } & DefaultMapOptions
+  } & MapOptions
 > = ({ tokenOrCallback, ...props }) => {
   let context = React.useContext(MapkitContext)
 

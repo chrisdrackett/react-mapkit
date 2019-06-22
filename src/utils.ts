@@ -10,6 +10,10 @@ type MapConstructionOptions = NonNullable<
   ConstructorParameters<typeof mapkit.Map>[1]
 >
 
+type MarkerConstructionOptions = NonNullable<
+  ConstructorParameters<typeof mapkit.MarkerAnnotation>[1]
+>
+
 type PaddingConstructorOptions = NonNullable<
   ConstructorParameters<typeof mapkit.Padding>[0]
 >
@@ -82,10 +86,10 @@ export const createMapRect = (
   return new mapkit.MapRect(x, y, width, height)
 }
 
-// 🗺️ Map construction
+// 🗺️ Map Options
 
 // these are the props we expose to users.
-export type DefaultMapOptions = Merge<
+export type MapOptions = Merge<
   MapConstructionOptions,
   {
     visibleMapRect?: Rect
@@ -102,7 +106,7 @@ export const propsToMapConstructionOptions = ({
   center,
   padding,
   ...options
-}: DefaultMapOptions) => {
+}: MapOptions) => {
   return {
     visibleMapRect: visibleMapRect && createMapRect(...visibleMapRect),
     region: region && createCoordinateRegionFromValues(region),
@@ -112,6 +116,15 @@ export const propsToMapConstructionOptions = ({
   }
 }
 
-export type MarkerConstructionOptions = NonNullable<
-  ConstructorParameters<typeof mapkit.MarkerAnnotation>[1]
+// 📌 Marker Options
+
+// these are the props we expose to users.
+export type MarkerOptions = Merge<
+  MapConstructionOptions,
+  {
+    visibleMapRect?: Rect
+    region?: RegionType
+    center?: NumberTuple
+    padding?: PaddingType
+  }
 >

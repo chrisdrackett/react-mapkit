@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { MapkitContext } from './MapkitProvider'
-import { DefaultMapOptions, propsToMapConstructionOptions } from './utils'
+import { MapOptions, propsToMapConstructionOptions } from './utils'
 
 import {
   NumberTuple,
@@ -12,7 +12,7 @@ import {
   createCoordinateRegionFromValues,
 } from './utils'
 
-export const useMap = (defaultOptions: DefaultMapOptions = {}) => {
+export const useMap = (defaultOptions: MapOptions = {}) => {
   const [defaultMapOptions] = React.useState(defaultOptions)
   let { mapkit } = React.useContext(MapkitContext)
   let mapRef = React.useRef<HTMLDivElement>(null)
