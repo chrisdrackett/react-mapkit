@@ -8,7 +8,7 @@ node_modules
 .rts2_cache_umd
 dist
 
-/keygen/key.p8
+/tokengen/key.p8
 /devToken.js
 
 /yarn-error.log
