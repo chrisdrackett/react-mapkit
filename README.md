@@ -7,48 +7,121 @@
 
 This project is still in development and is missing features (including being able to place anything other than markers on a map). Contributions are welcome!
 
-See the [demo storybook](https://chrisdrackett.github.io/react-mapkit/?selectedStory=all%20props&full=0&addons=1&stories=1&panelRight=1&addonPanel=storybooks%2Fstorybook-addon-knobs)!
+See the [demo storybook](https://chrisdrackett.github.io/react-mapkit/)!
 
 ## Install
 
 `yarn add react-mapkit`
 
-### Key generation (optional)
+### Token generation (optional)
 
-This package includes a script you can use to generate a JWT key. To use add your private key from Apple to the keygen folder as `key.p8` then run:
+This package includes a script you can use to generate a JWT token.
 
-`yarn keygen`
+At the moment this only work if you've run `yarn` within the package folder and run the script from within `react-mapkit`. This should be fixed (https://github.com/chrisdrackett/react-mapkit/issues/14)
 
-follow the prompts. The generated key can then be used for your app. If you want to generate short keys you can refer to the script in keygen to get an idea of how to do this in node.
+First add your private key from Apple to the tokengen folder with the name `key.p8` then run:
+
+`yarn tokengen`
+
+Follow the prompts. The generated token can then be used for your app. If you want to generate short lived tokens you can refer to the script in tokengen to get an idea of how to do this in node.
 
 ## Storybook
 
 This project contains a [storybook](https://storybook.js.org) that shows examples of how the component can be used. To use this storybook follow these steps:
 
 1.  copy `devToken.js.rename` to `devToken.js`
-2.  add a valid token from apple to `devToken.js`
+2.  add a valid token from tokengen (see above) or similar to `devToken.js`
 3.  run `yarn` then `yarn storybook`
 4.  visit the URL storybook gives you
 5.  play with maps!
 
-## MapKit Component
+## Use
 
-This is the component that will render a map. You'll need to provide either a `callbackUrl` or a `token` to the `tokenOrCallback` prop for this component to work.
+`React Mapkit` can be used a couple different ways. No matter what method you use, you'll need to use a token or callback. Refer to https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init for info about using a server and callback or use the `tokengen` script included in this package to create your own token.
 
-### Default Props
+Now on to the various ways to use this lib:
 
-You can set the initial view of the map using the props prefaced with `default`. Note that once the component has rendered changing these props (or `tokenOrCallback`) will not have any effect on the component.
+### 1. `Map` component alone
 
-If you want to programmatically change the rotation or viewport of the map after rendering this component can work with a function as children. For example, the following code will let you update the rotation of the map:
+This is probably the simplest way to use `react-mapkit`. This method works if you just want to render a single map and don't need to manipulate it (other than placing markers) via. code.
+
+When using the `Map` component alone you'll need to provide the `tokenOrCallback` prop.
 
 ```js
-<MapKit
-  tokenOrCallback={devToken}
->
-  {({ setRotation }) => {
-    setRotation(<pass in a number here to set rotation>)
-  }}
-</MapKit>
+import { Map, Marker } from 'react-mapkit'
+
+const MapAlone = () => (
+  <Map tokenOrCallback={<token or callback here>} center={[37.415, -122.048333]}>
+    <Marker latitude={47.6754} longitude={-122.2084} />
+  </Map>
+)
 ```
 
-There is an example of this in the projects storybook.
+### 2. `MapProvider`
+
+The second way to use `react-mapkit` is by having a provider. This method is useful if you plan on having more than one map in your app and don't want to have a `tokenOrCallback` prop on all of them. I suggest putting the `MapkitProvider` at the top of your app so it only loads once.
+
+```js
+import { MapkitProvider, Map, Marker } from 'react-mapkit'
+
+const MapWithProvider = () => (
+  <MapkitProvider tokenOrCallback={<token or callback here>}>
+    <Map center={[37.415, -122.048333]}>
+      <Marker latitude={47.6754} longitude={-122.2084} />
+    </Map>
+  </MapkitProvider>
+)
+```
+
+### 3. `MapProvider` with `useMap` hook
+
+This is the most powerful way to use this library as it gives you full access to both `mapkit` and the `map`. This lets you do anything that mapkit supports even if this library does not yet support it. This method is similar to the above as you are using both the `MapkitProvider` and `Map` components, but you'll also use the `useMap` hook to get access to the map instance.
+
+`useMap` provides the following:
+
+- `mapkit`: the mapkit library itself
+- `map`: the instance of a map
+- `mapProps`: a set of props you'll need to spread onto a `Map` component to create a map.
+- `setVisibleMapRect`, `setRegion`, `setCenter`, `setRotation`: convinance functions to manipulate the map. More coming soon!
+
+```js
+import { MapkitProvider, Map, useMap, Marker } from 'react-mapkit'
+
+const UseMapExample = () => {
+  const { map, mapProps, setRotation } = useMap()
+
+  return (
+    <>
+      <button onClick={() => map.setRotationAnimated(50)}>rotate to 50deg!</button>
+      <button onClick={() => setRotation(50)}>same as the above, but using the react-mapkit provided function.</button>
+      <Map {...mapProps} />
+    </>
+  )
+}
+
+const MapWithUseMap = () => (
+  <MapkitProvider tokenOrCallback={<token or callback here>}>
+    <UseMapExample/>
+  </MapkitProvider>
+)
+```
+
+## Notes on various components / hooks
+
+### Default Map Options
+
+Both the `Map` component and the `useMap` hook can take default map options. for map these are passed as props. For example the following sets a custom center for the map:
+
+```js
+<Map tokenOrCallback={devToken} center={[37.415, -122.048333]} />
+```
+
+To do the same with `useMap` you would do:
+
+```js
+const { map } = useMap({ center: [37.415, -122.048333] })
+```
+
+The available options can be found here: https://developer.apple.com/documentation/mapkitjs/mapconstructoroptions
+
+Note that some of these have been simplified so you don't need to use mapkit constructors. For example, instead of having to pass create a coordinate via `new mapkit.Coordinate(37.415, -122.048333)` to supply to `center` you just pass `[37.415, -122.048333]`.
