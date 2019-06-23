@@ -1,6 +1,23 @@
 {
-  "name": "mapkit",
-  "version": "0.1.0",
+  "name": "react-mapkit",
+  "version": "0.6.0",
+  "description": "React wrapper for Apple's mapkit.js.",
+  "license": "MIT",
+  "author": "Chris Drackett",
+  "homepage": "https://github.com/chrisdrackett/react-mapkit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrisdrackett/react-mapkit"
+  },
+  "bugs": {
+    "url": "https://github.com/chrisdrackett/react-mapkit/issues"
+  },
+  "keywords": [
+    "react-component",
+    "maps",
+    "mapkit",
+    "apple"
+  ],
   "main": "dist/index.js",
   "umd:main": "dist/mapkit.umd.production.js",
   "module": "dist/mapkit.es.production.js",
@@ -83,6 +100,7 @@
     "start": "concurrently \"yarn:package\" \"yarn:example\"",
     "build": "tsdx build",
     "test": "tsdx test --env=jsdom",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "deploy": "./scripts/deploy.js"
   }
 }
