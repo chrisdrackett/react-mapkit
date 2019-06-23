@@ -7,5 +7,16 @@ module.exports = ({ config, mode }) => {
     },
   })
   config.resolve.extensions.push('.ts', '.tsx')
+  config.module.rules.push({
+    test: /\.stories\.tsx?$/,
+    loaders: [
+      {
+        loader: require.resolve('@storybook/addon-storysource/loader'),
+        options: { parser: 'typescript' },
+      },
+    ],
+    enforce: 'pre',
+  })
+
   return config
 }
