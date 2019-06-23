@@ -25,7 +25,7 @@ const MapProvider: React.FC<{ context: MapContextType }> = ({
   return <MapContext.Provider value={context} children={children} />
 }
 
-// this component is the parent to the mapbox map components
+// this component is the parent to the mapkit generated map components
 const MapContainer: React.FC<{ mapRef: MapRef }> = ({ children, mapRef }) => {
   return (
     <div
