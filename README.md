@@ -21,7 +21,7 @@ At the moment this only work if you've run `yarn` within the package folder and 
 
 First add your private key from Apple to the tokengen folder with the name `key.p8` then run:
 
-`yarn tokengen`
+`node tokengen`
 
 Follow the prompts. The generated token can then be used for your app. If you want to generate short lived tokens you can refer to the script in tokengen to get an idea of how to do this in node.
 

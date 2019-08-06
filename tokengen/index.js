@@ -7,7 +7,7 @@ const payload = {
   iat: Date.now() / 1000,
 }
 
-const authKey = fs.readFileSync('./keygen/key.p8')
+const authKey = fs.readFileSync('./tokengen/key.p8')
 
 const header = {
   typ: 'JWT',
