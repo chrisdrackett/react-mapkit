@@ -1,7 +1,7 @@
 {
   "include": ["src", "types", "stories"],
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "noEmit": true,
@@ -24,11 +24,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
-    "typeRoots": [
-      "types",
-      "node_modules/mapkit-typescript",
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/mapkit-typescript", "node_modules/@types"],
     "paths": {
       "*": ["src/*", "node_modules/*"]
     },
