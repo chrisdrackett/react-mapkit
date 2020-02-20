@@ -47,7 +47,12 @@ export const MapkitProvider: React.FC<ProviderProps> = ({
             }
           },
         })
-        setContext({ mapkit, isInProvider: true })
+                
+        mapkit.addEventListener("configuration-change", (event)=> {
+            if (event.status === 'Initialized') {
+              SetContext({ mapkit, isInProvider: true });
+            }
+        });
       })
     }
   }, [existingContext.isInProvider, tokenOrCallback])
