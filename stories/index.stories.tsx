@@ -2,7 +2,15 @@ import React from 'react'
 
 import { storiesOf } from '@storybook/react'
 
-import { Map, MapkitProvider, useMap, Marker } from '../src'
+import {
+  Map,
+  MapkitProvider,
+  useMap,
+  Marker,
+  CircleOverlay,
+  PolygonOverlay,
+  PolylineOverlay,
+} from '../src'
 import devToken from '../devToken'
 
 const UseMapExample = () => {
@@ -82,3 +90,61 @@ storiesOf('Markers', module).add('adding a marker', () => (
     />
   </Map>
 ))
+
+storiesOf('Overlays', module)
+  .add('Circles', () => (
+    <Map
+      tokenOrCallback={devToken}
+      region={{
+        latitude: 47.6754,
+        longitude: -122.2084,
+        latitudeSpan: 0.006,
+        longitudeSpan: 0.006,
+      }}
+    >
+      <CircleOverlay
+        latitude={47.6754}
+        longitude={-122.2084}
+        radius={100}
+        styles={{ fillColor: 'red', strokeColor: 'red' }}
+      />
+    </Map>
+  ))
+  .add('Polygons', () => (
+    <Map
+      tokenOrCallback={devToken}
+      region={{
+        latitude: 47.6754,
+        longitude: -122.2084,
+        latitudeSpan: 0.006,
+        longitudeSpan: 0.006,
+      }}
+    >
+      <PolygonOverlay
+        points={[
+          [47.6754, -122.2084],
+          [47.6764, -122.2073],
+          [47.6747, -122.2061],
+        ]}
+      />
+    </Map>
+  ))
+  .add('Polyline', () => (
+    <Map
+      tokenOrCallback={devToken}
+      region={{
+        latitude: 47.6754,
+        longitude: -122.2084,
+        latitudeSpan: 0.006,
+        longitudeSpan: 0.006,
+      }}
+    >
+      <PolylineOverlay
+        points={[
+          [47.6754, -122.2084],
+          [47.6764, -122.2073],
+        ]}
+        styles={{ lineWidth: 4 }}
+      />
+    </Map>
+  ))
