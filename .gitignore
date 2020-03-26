@@ -2,6 +2,7 @@
 *.log
 .DS_Store
 node_modules
+package-lock.json
 .cache
 .rts2_cache_cjs
 .rts2_cache_es
