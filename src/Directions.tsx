@@ -12,12 +12,12 @@ type annotationOptions = {
 type DirectionsProps = {
   origin: NumberTuple
   destination: NumberTuple
-  transportType?: 'Automobile' | 'Walking'
+  transportType: string
   style?: mapkit.StyleConstructorOptions
   options?: mapkit.DirectionsConstructorOptions
   showAnnotations?: boolean
   annotationOptions?: annotationOptions
-  routeDetails?: (arg0: {
+  onRouteUpdate?: (arg0: {
     steps: mapkit.RouteStep[]
     distance: number
     expectedTravelTime: number
@@ -27,7 +27,7 @@ type DirectionsProps = {
 export const Directions: React.FC<DirectionsProps> = ({
   origin,
   destination,
-  transportType = 'Automobile',
+  transportType = mapkit.Directions.Transport.Automobile,
   style,
   showAnnotations = true,
   annotationOptions = {
@@ -35,20 +35,17 @@ export const Directions: React.FC<DirectionsProps> = ({
     destination: { color: 'green' },
   },
   options,
-  routeDetails = () => null,
+  onRouteUpdate = () => null,
 }) => {
   const { mapkit, map } = React.useContext(MapContext)
 
   React.useEffect(() => {
     if (mapkit && map) {
       const directions = new mapkit.Directions(options)
-      const originCoordinates = createCoordinate(
-        origin[0] as number,
-        origin[1] as number,
-      )
+      const originCoordinates = createCoordinate(origin[0], origin[1])
       const destinationCoordinates = createCoordinate(
-        destination[0] as number,
-        destination[1] as number,
+        destination[0],
+        destination[1],
       )
 
       if (showAnnotations) {
@@ -76,9 +73,7 @@ export const Directions: React.FC<DirectionsProps> = ({
           origin: originCoordinates,
           destination: destinationCoordinates,
           transportType:
-            transportType === 'Automobile'
-              ? mapkit.Directions.Transport.Automobile
-              : mapkit.Directions.Transport.Walking,
+            transportType || mapkit.Directions.Transport.Automobile,
         },
         (err, data) => {
           if (err) return console.error(err)
@@ -88,7 +83,7 @@ export const Directions: React.FC<DirectionsProps> = ({
             const styles = new mapkit.Style(style)
             overlay.style = styles
             map.addOverlay(overlay)
-            routeDetails({
+            onRouteUpdate({
               steps: route.steps,
               distance: route.distance,
               expectedTravelTime: route.expectedTravelTime,
