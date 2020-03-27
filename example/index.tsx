@@ -2,14 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import devToken from '../devToken'
-import { MapkitProvider, Map, Marker } from '../src'
+import { MapkitProvider, Map } from '../src'
 
 const App = () => {
   return (
     <MapkitProvider tokenOrCallback={devToken}>
-      <Map>
-        <Marker />
-      </Map>
+      <Map />
     </MapkitProvider>
   )
 }

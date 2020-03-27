@@ -1,5 +1,4 @@
 {
-  "include": ["src", "types", "stories"],
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
@@ -8,8 +7,9 @@
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
-    "rootDir": "./",
+    "rootDir": "./src",
     "strict": true,
+    "skipLibCheck": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
@@ -25,9 +25,7 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "typeRoots": ["types", "node_modules/@types"],
-    "paths": {
-      "*": ["src/*", "node_modules/*"]
-    },
     "jsx": "react"
-  }
+  },
+  "exclude": ["node_modules", "dist", "scripts"]
 }
