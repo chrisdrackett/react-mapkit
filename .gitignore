@@ -9,7 +9,7 @@ package-lock.json
 .rts2_cache_umd
 dist
 
-/tokengen/key.p8
+/tokengen/*.p8
 /devToken.js
 
 /yarn-error.log
