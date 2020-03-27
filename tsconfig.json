@@ -24,10 +24,10 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
-    "typeRoots": ["node_modules/mapkit-typescript", "node_modules/@types"],
+    "typeRoots": ["types", "node_modules/@types"],
     "paths": {
       "*": ["src/*", "node_modules/*"]
     },
-    "jsx": "react",
+    "jsx": "react"
   }
 }
