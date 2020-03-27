@@ -22,7 +22,7 @@ export const PolygonOverlay: React.FC<PolygonOverlayProps> = ({
       const overlay = new mapkit.PolygonOverlay(coordinates)
       overlay.style = new mapkit.Style(styles)
       data ? (overlay.data = data) : null
-      map.addOverlays([overlay])
+      map.addOverlay(overlay)
     }
   }, [mapkit, map, points, styles])
 

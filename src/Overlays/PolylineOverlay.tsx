@@ -22,7 +22,7 @@ export const PolylineOverlay: React.FC<PolylineOverlayProps> = ({
       const overlay = new mapkit.PolylineOverlay(coordinates)
       overlay.style = new mapkit.Style(styles)
       data ? (overlay.data = data) : null
-      map.addOverlays([overlay])
+      map.addOverlay(overlay)
     }
   }, [mapkit, map, points, styles])
 

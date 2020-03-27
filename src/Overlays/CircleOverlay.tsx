@@ -27,7 +27,7 @@ export const CircleOverlay: React.FC<CircleOverlayProps> = ({
       const overlay = new mapkit.CircleOverlay(coordinates, radius)
       overlay.style = new mapkit.Style(styles)
       data ? (overlay.data = data) : null
-      map.addOverlays([overlay])
+      map.addOverlay(overlay)
     }
   }, [mapkit, map, latitude, longitude, radius, styles])
 
