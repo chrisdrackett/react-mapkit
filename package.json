@@ -1,6 +1,6 @@
 {
   "name": "react-mapkit",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "React wrapper for Apple's mapkit.js.",
   "license": "MIT",
   "author": "Chris Drackett",
@@ -57,8 +57,8 @@
     "@storybook/addons": "^5.1.9",
     "@storybook/react": "^5.1.9",
     "@storybook/storybook-deployer": "^2.8.1",
-    "@types/little-loader": "^0.2.0",
     "@types/jest": "^24.0.15",
+    "@types/little-loader": "^0.2.0",
     "@types/react": "^16.9.26",
     "@types/react-dom": "^16.9.5",
     "@types/storybook__addon-knobs": "^5.0.1",
