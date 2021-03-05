@@ -61,11 +61,13 @@ const MapAlone = () => (
 
 The second way to use `react-mapkit` is by having a provider. This method is useful if you plan on having more than one map in your app and don't want to have a `tokenOrCallback` prop on all of them. I suggest putting the `MapkitProvider` at the top of your app so it only loads once.
 
+You can also optionally set the maps language using `language`. Refer to: https://developer.apple.com/documentation/mapkitjs/mapkitinitoptions/2978217-language
+
 ```js
 import { MapkitProvider, Map, Marker } from 'react-mapkit'
 
 const MapWithProvider = () => (
-  <MapkitProvider tokenOrCallback={<token or callback here>}>
+  <MapkitProvider tokenOrCallback={<token or callback here>} language={<language id>}>
     <Map center={[37.415, -122.048333]}>
       <Marker latitude={47.6754} longitude={-122.2084} />
     </Map>
