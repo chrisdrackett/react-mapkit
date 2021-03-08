@@ -17,10 +17,12 @@ type ProviderProps = {
   // ⚠️ Pick between callbackUrl or token.
   // https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init
   tokenOrCallback: string
+  language: string
 }
 
 export const MapkitProvider: React.FC<ProviderProps> = ({
   tokenOrCallback,
+  language,
   children,
 }) => {
   const existingContext = React.useContext(MapkitContext)
@@ -46,11 +48,12 @@ export const MapkitProvider: React.FC<ProviderProps> = ({
               done(tokenOrCallback)
             }
           },
+          language,
         })
         setContext({ mapkit, isInProvider: true })
       })
     }
-  }, [existingContext.isInProvider, tokenOrCallback])
+  }, [existingContext.isInProvider, tokenOrCallback, language])
 
   return <MapkitContext.Provider value={context} children={children} />
 }
