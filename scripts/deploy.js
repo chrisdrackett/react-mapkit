@@ -13,18 +13,18 @@ let holdingToken = false
 
 // if we have a devToken let save it for after the deploy
 fs.rename(
-  hereRelative('../devToken.js'),
-  hereRelative('../holdDevToken.js'),
+  hereRelative('../devToken.ts'),
+  hereRelative('../holdDevToken.ts'),
   (err) => {
     if (!err) {
       console.log('Found a devToken, saving it for after deploy.')
       holdingToken = true
 
       fs.copyFile(
-        hereRelative('../devToken.js.rename'),
-        hereRelative('../devToken.js'),
+        hereRelative('../devToken.ts.rename'),
+        hereRelative('../devToken.ts'),
         (err) => {
-          console.log('copied the template to devToken.js')
+          console.log('copied the template to devToken.ts')
 
           let result
 
@@ -33,12 +33,12 @@ fs.rename(
           if (result) {
             if (holdingToken) {
               fs.copyFile(
-                hereRelative('../holdDevToken.js'),
-                hereRelative('../devToken.js'),
+                hereRelative('../holdDevToken.ts'),
+                hereRelative('../devToken.ts'),
                 (err) => {
                   console.log('Putting back the token we saved.')
 
-                  fs.unlink(hereRelative('../holdDevToken.js'), (err) => {
+                  fs.unlink(hereRelative('../holdDevToken.ts'), (err) => {
                     console.log('Removing the temp holding file.')
                     process.exit(result.status)
                   })
