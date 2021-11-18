@@ -1,3 +1,4 @@
+export * from './Annotation'
 export * from './MapkitProvider'
 export * from './Map'
 export * from './Marker'
