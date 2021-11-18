@@ -17,7 +17,7 @@ type ProviderProps = {
   // ⚠️ Pick between callbackUrl or token.
   // https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init
   tokenOrCallback: string
-  language: string
+  language?: string
 }
 
 export const MapkitProvider: React.FC<ProviderProps> = ({
