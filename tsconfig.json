@@ -2,7 +2,10 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "lib": ["dom", "esnext"],
+    "lib": [
+      "dom",
+      "esnext"
+    ],
     "noEmit": true,
     "importHelpers": true,
     "declaration": true,
@@ -24,8 +27,15 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
-    "typeRoots": ["types", "node_modules/@types"],
+    "typeRoots": [
+      "types",
+      "node_modules/@types"
+    ],
     "jsx": "react"
   },
-  "exclude": ["node_modules", "dist", "scripts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "scripts"
+  ]
 }
