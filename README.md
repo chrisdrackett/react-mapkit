@@ -29,8 +29,8 @@ Follow the prompts. The generated token can then be used for your app. If you wa
 
 This project contains a [storybook](https://storybook.js.org) that shows examples of how the component can be used. To use this storybook follow these steps:
 
-1.  copy `devToken.js.rename` to `devToken.js`
-2.  add a valid token from tokengen (see above) or similar to `devToken.js`
+1.  copy `devToken.ts.rename` to `devToken.ts`
+2.  add a valid token from tokengen (see above) or similar to `devToken.ts`
 3.  run `yarn` then `yarn storybook`
 4.  visit the URL storybook gives you
 5.  play with maps!
@@ -59,7 +59,7 @@ const MapAlone = () => (
 
 ### 2. `MapProvider`
 
-The second way to use `react-mapkit` is by having a provider. This method is useful if you plan on having more than one map in your app and don't want to have a `tokenOrCallback` prop on all of them. I suggest putting the `MapkitProvider` at the top of your app so it only loads once.
+The second way to use `react-mapkit` is by having a provider. This method is useful if you plan on having more than one map in your app and don't want to have a `tokenOrCallback` prop on all of them. I suggest putting the `MapkitProvider` at the top of your app so it only loads once. Loading it twice can cause errors.
 
 You can also optionally set the maps language using `language`. Refer to: https://developer.apple.com/documentation/mapkitjs/mapkitinitoptions/2978217-language
 

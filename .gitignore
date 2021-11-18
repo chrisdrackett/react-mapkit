@@ -9,7 +9,7 @@ node_modules
 dist
 
 /tokengen/*.p8
-/devToken.js
+/devToken.ts
 
 /yarn-error.log
 /storybook-static
