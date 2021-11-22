@@ -10,6 +10,10 @@ type MapConstructionOptions = NonNullable<
   ConstructorParameters<typeof mapkit.Map>[1]
 >
 
+type AnnotationConstructionOptions = NonNullable<
+  ConstructorParameters<typeof mapkit.Annotation>[1]
+>
+
 type MarkerConstructionOptions = NonNullable<
   ConstructorParameters<typeof mapkit.MarkerAnnotation>[1]
 >
@@ -117,6 +121,13 @@ export const propsToMapConstructionOptions = ({
 // 📌 Marker Options
 
 // these are the props we expose to users.
+export type AnnotationOptions = Merge<
+  AnnotationConstructionOptions,
+  {
+    padding?: PaddingType
+  }
+>
+
 export type MarkerOptions = Merge<
   MarkerConstructionOptions,
   {
