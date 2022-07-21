@@ -49,16 +49,18 @@ const CreateMap: React.FC<MapOptions> = ({ children, ...defaultOptions }) => {
 }
 
 export const Map: React.FC<
-  {
-    // ⚠️ Pick between callbackUrl or token.
-    // https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init
-    // not needed if within a `MapProvider`
-    tokenOrCallback?: string
-    language?: string
-    mapRef?: MapRef
-    mapkit?: typeof mapkit
-    map?: mapkit.Map
-  } & MapOptions
+  React.PropsWithChildren<
+    {
+      // ⚠️ Pick between callbackUrl or token.
+      // https://developer.apple.com/documentation/mapkitjs/mapkit/2974045-init
+      // not needed if within a `MapProvider`
+      tokenOrCallback?: string
+      language?: string
+      mapRef?: MapRef
+      mapkit?: typeof mapkit
+      map?: mapkit.Map
+    } & MapOptions
+  >
 > = ({ tokenOrCallback, language = 'en', mapkit, map, mapRef, ...props }) => {
   let context = React.useContext(MapkitContext)
 
