@@ -13,7 +13,7 @@ type MarkerProps = {
   longitude: number
 } & MarkerOptions
 
-export const Marker: React.FC<MarkerProps> = ({
+export const Marker: React.FC<PropsWithChildren<MarkerProps>> = ({
   latitude,
   longitude,
   ...options

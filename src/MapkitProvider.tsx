@@ -20,7 +20,7 @@ type ProviderProps = {
   language?: string
 }
 
-export const MapkitProvider: React.FC<ProviderProps> = ({
+export const MapkitProvider: React.FC<PropsWithChildren<ProviderProps>> = ({
   tokenOrCallback,
   language,
   children,
