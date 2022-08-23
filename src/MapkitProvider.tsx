@@ -1,6 +1,6 @@
 /* global mapkit */
 
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 import load from 'little-loader'
 
 type MapkitContextType = {
@@ -20,7 +20,7 @@ type ProviderProps = {
   language?: string
 }
 
-export const MapkitProvider: React.FC<ProviderProps> = ({
+export const MapkitProvider: React.FC<PropsWithChildren<ProviderProps>> = ({
   tokenOrCallback,
   language,
   children,

@@ -96,6 +96,7 @@ export type MapOptions = Merge<
     region?: RegionType
     center?: NumberTuple
     padding?: PaddingType
+    tintColor?: string
   }
 >
 
@@ -105,12 +106,14 @@ export const propsToMapConstructionOptions = ({
   region,
   center,
   padding,
+  tintColor,
   ...options
 }: MapOptions) => ({
   visibleMapRect: visibleMapRect && createMapRect(...visibleMapRect),
   region: region && createCoordinateRegionFromValues(region),
   center: center && createCoordinate(...center),
   padding: padding ? createPadding(padding) : createPadding(0),
+  tintColor: tintColor,
   ...options,
 })
 
