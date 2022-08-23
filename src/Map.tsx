@@ -1,6 +1,6 @@
 /* global mapkit */
 
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 
 import { MapkitContext, MapkitProvider } from './MapkitProvider'
 import { useMap } from './useMap'

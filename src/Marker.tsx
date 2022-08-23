@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 
 import { MapContext } from './Map'
 
@@ -11,11 +11,15 @@ import {
 type MarkerProps = {
   latitude: number
   longitude: number
+  title?: string
+  subtitle?: string
 } & MarkerOptions
 
 export const Marker: React.FC<PropsWithChildren<MarkerProps>> = ({
   latitude,
   longitude,
+  title,
+  subtitle,
   ...options
 }) => {
   const { mapkit, map } = React.useContext(MapContext)

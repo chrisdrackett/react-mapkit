@@ -83,5 +83,17 @@ export const useMap = (defaultOptions: MapOptions = {}) => {
       },
       [map],
     ),
+
+    drawLine: React.useCallback(
+      (coords: Array<mapkit.Coordinate>, style: mapkit.Style) => {
+        if (map && mapkit) {
+          let polyline =
+            new mapkit.PolylineOverlay(coords, { style: style });
+          map.addOverlay(polyline);
+        }
+      },
+      [map, mapkit],
+    ),
+
   }
 }
